@@ -1,0 +1,40 @@
+﻿@page
+@model Bookly.Pages.Categories.IndexModel
+@{
+    ViewData["Title"] = "Kategorie";
+}
+
+<h2 class="mb-4">📂 Kategorie</h2>
+
+<a asp-page="Create" class="btn btn-success mb-3">➕ Dodaj nową kategorię</a>
+
+@if (Model.Categories.Any())
+{
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Nazwa</th>
+            <th>Liczba książek</th>
+            <th>Akcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var category in Model.Categories)
+        {
+            <tr>
+                <td>@category.Name</td>
+                <td>@category.BookCategories.Count</td>
+                <td>
+                    <a asp-page="Details" asp-route-id="@category.Id" class="btn btn-sm btn-info">📚 Książki</a>
+                    <a asp-page="Edit" asp-route-id="@category.Id" class="btn btn-sm btn-warning">✏️ Edytuj</a>
+                    <a asp-page="Delete" asp-route-id="@category.Id" class="btn btn-sm btn-danger">🗑️ Usuń</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning">Brak kategorii do wyświetlenia.</div>
+}

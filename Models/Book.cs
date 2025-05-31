@@ -6,18 +6,18 @@ public class Book
 {
     public int Id { get; set; }
 
-    [Required]
-    public string Title { get; set; } = null!;
+    [Required(ErrorMessage = "Tytuł jest wymagany.")]
+    public string Title { get; set; } = string.Empty;
 
-    [Required]
-    public string Author { get; set; } = null!;
+    [Required(ErrorMessage = "Autor jest wymagany.")]
+    public string Author { get; set; } = string.Empty;
 
-    [Required]
-    [Range(1000, 2025)]
+    [Required(ErrorMessage = "Rok jest wymagany.")]
+    [Range(1, 2025, ErrorMessage = "Rok musi być z przedziału 1–2025.")]
     public int Year { get; set; }
 
     public bool IsBorrowed { get; set; } = false;
 
-    public ICollection<BookCategory> BookCategories { get; set; } = new List<BookCategory>();
-    public ICollection<Loan> Loans { get; set; } = new List<Loan>();
+    public List<BookCategory> BookCategories { get; set; } = new();
+    public List<Loan> Loans { get; set; } = new();
 }

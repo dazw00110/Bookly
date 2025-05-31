@@ -1,0 +1,21 @@
+﻿@page
+@model Bookly.Pages.Categories.CreateModel
+@{
+    ViewData["Title"] = "Dodaj kategorię";
+}
+
+<h1>➕ Dodaj kategorię</h1>
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Category.Name" class="form-label"></label>
+        <input asp-for="Category.Name" class="form-control" />
+        <span asp-validation-for="Category.Name" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Zapisz</button>
+    <a asp-page="Index" class="btn btn-secondary">Anuluj</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

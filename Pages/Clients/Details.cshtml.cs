@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bookly.Pages.Books;
+namespace Bookly.Pages.Categories;
 
 public class DetailsModel : PageModel
 {
@@ -15,19 +15,18 @@ public class DetailsModel : PageModel
         _context = context;
     }
 
-    public Book Book { get; set; } = new();
+    public Category Category { get; set; } = new();
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
-        var book = await _context.Books
-            .Include(b => b.BookCategories).ThenInclude(bc => bc.Category)
-            .Include(b => b.Loans).ThenInclude(l => l.Client)
-            .FirstOrDefaultAsync(b => b.Id == id);
+        var category = await _context.Categories
+            .Include(c => c.BookCategories).ThenInclude(bc => bc.Book)
+            .FirstOrDefaultAsync(c => c.Id == id);
 
-        if (book == null)
+        if (category == null)
             return NotFound();
 
-        Book = book;
+        Category = category;
         return Page();
     }
 }

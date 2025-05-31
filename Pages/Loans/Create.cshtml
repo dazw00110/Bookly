@@ -1,0 +1,34 @@
+﻿@page
+@model Bookly.Pages.Clients.CreateModel
+@{
+    ViewData["Title"] = "Dodaj klienta";
+}
+
+<h2>➕ Dodaj klienta</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Client.FirstName" class="form-label"></label>
+        <input asp-for="Client.FirstName" class="form-control" />
+        <span asp-validation-for="Client.FirstName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Client.LastName" class="form-label"></label>
+        <input asp-for="Client.LastName" class="form-control" />
+        <span asp-validation-for="Client.LastName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Client.Email" class="form-label"></label>
+        <input asp-for="Client.Email" class="form-control" />
+        <span asp-validation-for="Client.Email" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Zapisz</button>
+    <a asp-page="Index" class="btn btn-secondary">Anuluj</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

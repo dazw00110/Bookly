@@ -1,0 +1,20 @@
+﻿@page "{id:int}"
+@model Bookly.Pages.Categories.DeleteModel
+@{
+    ViewData["Title"] = "Usuń kategorię";
+}
+
+<h1 class="text-danger">🗑 Usuń kategorię</h1>
+
+<h4>Czy na pewno chcesz usunąć tę kategorię?</h4>
+
+<dl class="row">
+    <dt class="col-sm-3">Nazwa:</dt>
+    <dd class="col-sm-9">@Model.Category.Name</dd>
+</dl>
+
+<form method="post">
+    <input type="hidden" asp-for="Category.Id" />
+    <button type="submit" class="btn btn-danger">Usuń</button>
+    <a asp-page="Index" class="btn btn-secondary">Anuluj</a>
+</form>

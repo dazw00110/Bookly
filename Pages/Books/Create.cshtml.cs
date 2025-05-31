@@ -25,11 +25,8 @@ public class CreateModel : PageModel
 
     public async Task<IActionResult> OnGetAsync()
     {
+        Book.Year = DateTime.Now.Year; // 🟢 Domyślny rok (np. 2025)
         AllCategories = await _context.Categories.ToListAsync();
-
-        // ➤ Domyślny rok publikacji
-        Book.Year = 2025;
-
         return Page();
     }
 
@@ -41,7 +38,7 @@ public class CreateModel : PageModel
             return Page();
         }
 
-        // ➤ Przypisanie kategorii
+        // ➕ Przypisanie kategorii do książki
         Book.BookCategories = SelectedCategoryIds.Select(id => new BookCategory
         {
             CategoryId = id

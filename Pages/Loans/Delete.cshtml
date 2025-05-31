@@ -1,0 +1,26 @@
+﻿@page "{id:int}"
+@model Bookly.Pages.Clients.DeleteModel
+@{
+    ViewData["Title"] = "Usuń klienta";
+}
+
+<h1 class="text-danger">🗑 Usuń klienta</h1>
+
+<h4>Czy na pewno chcesz usunąć tego klienta?</h4>
+
+<dl class="row">
+    <dt class="col-sm-3">Imię i nazwisko:</dt>
+    <dd class="col-sm-9">@Model.Client.FirstName @Model.Client.LastName</dd>
+
+    <dt class="col-sm-3">Adres e-mail:</dt>
+    <dd class="col-sm-9">@Model.Client.Email</dd>
+
+    <dt class="col-sm-3">Liczba wypożyczeń:</dt>
+    <dd class="col-sm-9">@Model.Client.Loans.Count</dd>
+</dl>
+
+<form method="post">
+    <input type="hidden" asp-for="Client.Id" />
+    <button type="submit" class="btn btn-danger">Usuń</button>
+    <a asp-page="Index" class="btn btn-secondary">Anuluj</a>
+</form>

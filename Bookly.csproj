@@ -29,7 +29,6 @@
 
     <ItemGroup>
       <Folder Include="Migrations\" />
-      <Folder Include="Pages\Categories\" />
       <Folder Include="Pages\Clients\" />
       <Folder Include="Pages\Loans\" />
     </ItemGroup>

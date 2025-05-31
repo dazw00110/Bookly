@@ -1,59 +1,124 @@
 ﻿@page
 @model Bookly.Pages.Books.IndexModel
 @{
-    ViewData["Title"] = "Książki";
+    ViewData["Title"] = "Lista książek";
 }
 
-<h1 class="mb-4">
-    <i class="bi bi-journal-bookmark"></i> Lista książek
-</h1>
+<h2 class="mb-4">📚 Lista książek</h2>
 
-<p>
-    <a class="btn btn-success" asp-page="Create">➕ Dodaj nową książkę</a>
-</p>
+<form method="get" class="mb-4 border rounded p-3 bg-light">
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label">Tytuł</label>
+            <input type="text" name="Title" value="@Model.Title" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Autor</label>
+            <input type="text" name="Author" value="@Model.Author" class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Rok od</label>
+            <input type="number" name="YearFrom" value="@Model.YearFrom" min="1" max="2025" class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Rok do</label>
+            <input type="number" name="YearTo" value="@Model.YearTo" min="1" max="2025" class="form-control" />
+        </div>
+    </div>
 
-@if (Model.Books != null && Model.Books.Any())
+    <div class="row g-3 mt-3">
+        <div class="col-md-6">
+            <label class="form-label">Kategorie</label><br />
+            @foreach (var cat in Model.AllCategories)
+            {
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="SelectedCategoryIds" value="@cat.Id"
+                           @(Model.SelectedCategoryIds.Contains(cat.Id) ? "checked" : "") />
+                    <label class="form-check-label">@cat.Name</label>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Status</label>
+            <select class="form-select" name="Status">
+                @foreach (var option in new[] {
+                    new { Value = "", Label = "-- Wszystkie --" },
+                    new { Value = "available", Label = "Dostępna" },
+                    new { Value = "borrowed", Label = "Wypożyczona" }
+                })
+                {
+                    <option value="@option.Value" selected="@(Model.Status == option.Value)">
+                        @option.Label
+                    </option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary me-2">🔍 Szukaj</button>
+            <a href="/Books/Index" class="btn btn-outline-secondary">Resetuj</a>
+        </div>
+    </div>
+</form>
+
+<a asp-page="Create" class="btn btn-success mb-3">➕ Dodaj nową książkę</a>
+
+@if (Model.Books.Any())
 {
+    <p class="text-muted mb-2">
+        Znaleziono <strong>@Model.Books.Count</strong> książek
+    </p>
+
     <table class="table table-striped">
-        <thead class="table-light">
-        <tr>
-            <th>Tytuł</th>
-            <th>Autor</th>
-            <th>Rok</th>
-            <th>Kategorie</th>
-            <th>Status</th> <!-- teraz przedostatnia -->
-            <th>Akcje</th>
-        </tr>
+        <thead>
+            <tr>
+                <th>Tytuł</th>
+                <th>Autor</th>
+                <th>Rok</th>
+                <th>Kategorie</th>
+                <th>Status</th>
+                <th>Akcje</th>
+            </tr>
         </thead>
         <tbody>
-        @foreach (var book in Model.Books)
-        {
-            <tr>
-                <td>@book.Title</td>
-                <td>@book.Author</td>
-                <td>@book.Year</td>
-                <td>
-                    @if (book.BookCategories.Any())
-                    {
-                        @string.Join(", ", book.BookCategories.Select(bc => bc.Category.Name))
-                    }
-                    else
-                    {
-                        <span class="text-muted">brak</span>
-                    }
-                </td>
-                <td>@(book.IsBorrowed ? "Wypożyczona" : "Dostępna")</td> <!-- przeniesione tutaj -->
-                <td>
-                    <a class="btn btn-primary btn-sm" asp-page="Edit" asp-route-id="@book.Id">✏️ Edytuj</a>
-                    <a class="btn btn-info btn-sm" asp-page="Details" asp-route-id="@book.Id">ℹ️ Szczegóły</a>
-                    <a class="btn btn-danger btn-sm" asp-page="Delete" asp-route-id="@book.Id">🗑 Usuń</a>
-                </td>
-            </tr>
-        }
+            @foreach (var book in Model.Books)
+            {
+                <tr>
+                    <td>@book.Title</td>
+                    <td>@book.Author</td>
+                    <td>@book.Year</td>
+                    <td>
+                        @if (book.BookCategories.Any())
+                        {
+                            @string.Join(", ", book.BookCategories.Select(bc => bc.Category.Name))
+                        }
+                        else
+                        {
+                            <em>Brak</em>
+                        }
+                    </td>
+                    <td>
+                        @if (book.IsBorrowed)
+                        {
+                            <span class="badge bg-danger">Wypożyczona</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">Dostępna</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-page="Details" asp-route-id="@book.Id" class="btn btn-sm btn-info">Szczegóły</a>
+                        <a asp-page="Edit" asp-route-id="@book.Id" class="btn btn-sm btn-warning">Edytuj</a>
+                        <a asp-page="Delete" asp-route-id="@book.Id" class="btn btn-sm btn-danger">Usuń</a>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 }
 else
 {
-    <p class="text-muted">Brak książek w bazie danych.</p>
+    <div class="alert alert-warning">Brak książek spełniających kryteria.</div>
 }

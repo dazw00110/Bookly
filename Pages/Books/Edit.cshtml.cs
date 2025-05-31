@@ -25,15 +25,16 @@ public class EditModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
-        Book = await _context.Books
+        var book = await _context.Books
             .Include(b => b.BookCategories)
             .FirstOrDefaultAsync(b => b.Id == id);
 
-        if (Book == null)
+        if (book == null)
             return NotFound();
 
+        Book = book;
         AllCategories = await _context.Categories.ToListAsync();
-        SelectedCategoryIds = Book.BookCategories.Select(bc => bc.CategoryId).ToList();
+        SelectedCategoryIds = book.BookCategories.Select(bc => bc.CategoryId).ToList();
 
         return Page();
     }
@@ -53,12 +54,10 @@ public class EditModel : PageModel
         if (bookToUpdate == null)
             return NotFound();
 
-        // Aktualizacja pól
         bookToUpdate.Title = Book.Title;
         bookToUpdate.Author = Book.Author;
         bookToUpdate.Year = Book.Year;
 
-        // Resetowanie kategorii
         bookToUpdate.BookCategories.Clear();
 
         foreach (var catId in SelectedCategoryIds)

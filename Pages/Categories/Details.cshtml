@@ -1,0 +1,29 @@
+﻿@page
+@model Bookly.Pages.Categories.DetailsModel
+@{
+    ViewData["Title"] = "Szczegóły kategorii";
+}
+
+<h2 class="mb-4">📂 Kategoria: <span class="text-primary">@Model.Category.Name</span></h2>
+
+@if (Model.Category.BookCategories.Any())
+{
+    <h4>Książki przypisane do tej kategorii:</h4>
+    <ul class="list-group mb-4">
+        @foreach (var bookCategory in Model.Category.BookCategories)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>
+                    <strong>@bookCategory.Book.Title</strong> — @bookCategory.Book.Author (@bookCategory.Book.Year)
+                </span>
+                <a asp-page="/Books/Details" asp-route-id="@bookCategory.Book.Id" class="btn btn-sm btn-outline-info">Szczegóły</a>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <div class="alert alert-warning">Brak przypisanych książek do tej kategorii.</div>
+}
+
+<a asp-page="Index" class="btn btn-secondary">⬅️ Powrót</a>

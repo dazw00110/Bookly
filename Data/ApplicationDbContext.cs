@@ -1,7 +1,7 @@
-﻿using LibraryApp.Models;
+﻿using Bookly.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace LibraryApp.Data;
+namespace Bookly.Data;
 
 public class ApplicationDbContext : DbContext
 {

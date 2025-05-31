@@ -1,5 +1,5 @@
-using LibraryApp.Data;
-using LibraryApp.Models;
+using Bookly.Data;
+using Bookly.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 

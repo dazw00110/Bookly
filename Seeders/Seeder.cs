@@ -1,7 +1,7 @@
-﻿using LibraryApp.Data;
-using LibraryApp.Models;
+﻿using Bookly.Data;
+using Bookly.Models;
 
-namespace LibraryApp.Seeders;
+namespace Bookly.Seeders;
 
 public static class Seeder
 {

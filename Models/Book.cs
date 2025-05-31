@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LibraryApp.Models;
+namespace Bookly.Models;
 
 public class Book
 {

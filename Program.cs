@@ -1,5 +1,5 @@
-using LibraryApp.Data;
-using LibraryApp.Seeders;
+using Bookly.Data;
+using Bookly.Seeders;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

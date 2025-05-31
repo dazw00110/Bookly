@@ -1,4 +1,4 @@
-﻿namespace LibraryApp.Models;
+﻿namespace Bookly.Models;
 
 public class BookCategory
 {

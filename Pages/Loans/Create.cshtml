@@ -1,34 +1,22 @@
 ﻿@page
-@model Bookly.Pages.Clients.CreateModel
+@model Bookly.Pages.Loans.CreateModel
 @{
-    ViewData["Title"] = "Dodaj klienta";
+    ViewData["Title"] = "Nowe wypożyczenie";
 }
 
-<h2>➕ Dodaj klienta</h2>
+<h2>➕ Nowe wypożyczenie</h2>
 
 <form method="post">
     <div class="mb-3">
-        <label asp-for="Client.FirstName" class="form-label"></label>
-        <input asp-for="Client.FirstName" class="form-control" />
-        <span asp-validation-for="Client.FirstName" class="text-danger"></span>
+        <label class="form-label">Klient</label>
+        <select asp-for="Loan.ClientId" asp-items="Model.Clients" class="form-select"></select>
     </div>
 
     <div class="mb-3">
-        <label asp-for="Client.LastName" class="form-label"></label>
-        <input asp-for="Client.LastName" class="form-control" />
-        <span asp-validation-for="Client.LastName" class="text-danger"></span>
+        <label class="form-label">Książka</label>
+        <select asp-for="Loan.BookId" asp-items="Model.Books" class="form-select"></select>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="Client.Email" class="form-label"></label>
-        <input asp-for="Client.Email" class="form-control" />
-        <span asp-validation-for="Client.Email" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-success">Zapisz</button>
+    <button type="submit" class="btn btn-primary">Wypożycz</button>
     <a asp-page="Index" class="btn btn-secondary">Anuluj</a>
 </form>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}

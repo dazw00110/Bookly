@@ -4,52 +4,32 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bookly.Pages.Clients;
+namespace Bookly.Pages.Loans;
 
-public class DeleteModel : PageModel
+public class DetailsModel : PageModel
 {
     private readonly ApplicationDbContext _context;
 
-    public DeleteModel(ApplicationDbContext context)
+    public DetailsModel(ApplicationDbContext context)
     {
         _context = context;
     }
 
-    [BindProperty]
-    public Client Client { get; set; } = new();
+    public Loan Loan { get; set; } = null!;
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
-        Client = await _context.Clients
-            .Include(c => c.Loans)
-            .ThenInclude(l => l.Book)
-            .FirstOrDefaultAsync(c => c.Id == id);
+        var loan = await _context.Loans
+            .Include(l => l.Book)
+            .Include(l => l.Client)
+            .FirstOrDefaultAsync(l => l.Id == id);
 
-        return Client == null ? NotFound() : Page();
-    }
-
-    public async Task<IActionResult> OnPostAsync()
-    {
-        var client = await _context.Clients
-            .Include(c => c.Loans)
-            .ThenInclude(l => l.Book)
-            .FirstOrDefaultAsync(c => c.Id == Client.Id);
-
-        if (client != null)
+        if (loan == null)
         {
-            // Oznacz wszystkie wypożyczone książki jako dostępne
-            foreach (var loan in client.Loans)
-            {
-                if (loan.Book != null)
-                    loan.Book.IsBorrowed = false;
-
-                _context.Loans.Remove(loan);
-            }
-
-            _context.Clients.Remove(client);
-            await _context.SaveChangesAsync();
+            return NotFound();
         }
 
-        return RedirectToPage("Index");
+        Loan = loan;
+        return Page();
     }
 }

@@ -1,29 +1,46 @@
-﻿@page
-@model Bookly.Pages.Categories.DetailsModel
+﻿@page "{id:int}"
+@model Bookly.Pages.Clients.DetailsModel
 @{
-    ViewData["Title"] = "Szczegóły kategorii";
+    ViewData["Title"] = "Szczegóły klienta";
 }
 
-<h2 class="mb-4">📂 Kategoria: <span class="text-primary">@Model.Category.Name</span></h2>
+<h2>📋 Szczegóły klienta</h2>
 
-@if (Model.Category.BookCategories.Any())
+<dl class="row">
+    <dt class="col-sm-3">Imię i nazwisko:</dt>
+    <dd class="col-sm-9">@Model.Client.FirstName @Model.Client.LastName</dd>
+
+    <dt class="col-sm-3">E-mail:</dt>
+    <dd class="col-sm-9">@Model.Client.Email</dd>
+</dl>
+
+<h4>📚 Wypożyczone książki:</h4>
+
+@if (Model.Client.Loans.Any())
 {
-    <h4>Książki przypisane do tej kategorii:</h4>
-    <ul class="list-group mb-4">
-        @foreach (var bookCategory in Model.Category.BookCategories)
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Tytuł</th>
+            <th>Data wypożyczenia</th>
+            <th>Data zwrotu</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var loan in Model.Client.Loans)
         {
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span>
-                    <strong>@bookCategory.Book.Title</strong> — @bookCategory.Book.Author (@bookCategory.Book.Year)
-                </span>
-                <a asp-page="/Books/Details" asp-route-id="@bookCategory.Book.Id" class="btn btn-sm btn-outline-info">Szczegóły</a>
-            </li>
+            <tr>
+                <td>@loan.Book.Title</td>
+                <td>@loan.LoanDate.ToShortDateString()</td>
+                <td>
+                    @(loan.ReturnDate.HasValue ? loan.ReturnDate.Value.ToShortDateString() : "Nie zwrócono")
+                </td>
+            </tr>
         }
-    </ul>
+        </tbody>
+    </table>
 }
 else
 {
-    <div class="alert alert-warning">Brak przypisanych książek do tej kategorii.</div>
+    <div class="alert alert-info">Ten klient nie ma aktywnych wypożyczeń.</div>
 }
-
-<a asp-page="Index" class="btn btn-secondary">⬅️ Powrót</a>

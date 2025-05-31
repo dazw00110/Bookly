@@ -3,7 +3,7 @@ using Bookly.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Bookly.Pages.Categories;
+namespace Bookly.Pages.Clients;
 
 public class CreateModel : PageModel
 {
@@ -15,19 +15,21 @@ public class CreateModel : PageModel
     }
 
     [BindProperty]
-    public Category Category { get; set; } = new();
+    public Client Client { get; set; } = new();
 
-    public IActionResult OnGet()
-    {
-        return Page();
-    }
+    public IActionResult OnGet() => Page();
 
     public async Task<IActionResult> OnPostAsync()
     {
+        if (_context.Clients.Any(c => c.Email == Client.Email))
+        {
+            ModelState.AddModelError("Client.Email", "Podany adres e-mail już istnieje.");
+        }
+
         if (!ModelState.IsValid)
             return Page();
 
-        _context.Categories.Add(Category);
+        _context.Clients.Add(Client);
         await _context.SaveChangesAsync();
 
         return RedirectToPage("Index");

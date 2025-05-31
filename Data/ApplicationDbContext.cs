@@ -46,5 +46,10 @@ public class ApplicationDbContext : DbContext
             .HasOne(l => l.Client)
             .WithMany(c => c.Loans)
             .HasForeignKey(l => l.ClientId);
+
+        // Unikalny e-mail klienta
+        modelBuilder.Entity<Client>()
+            .HasIndex(c => c.Email)
+            .IsUnique();
     }
 }

@@ -1,42 +1,37 @@
 ﻿@page
-@model Bookly.Pages.Clients.IndexModel
+@model Bookly.Pages.Loans.IndexModel
 @{
-    ViewData["Title"] = "Lista klientów";
+    ViewData["Title"] = "Wypożyczenia";
 }
 
-<h2 class="mb-4">👤 Klienci</h2>
+<h2>📚 Wypożyczenia</h2>
 
-<a asp-page="Create" class="btn btn-success mb-3">➕ Dodaj klienta</a>
+<a asp-page="Create" class="btn btn-primary mb-3">➕ Nowe wypożyczenie</a>
 
-@if (Model.Clients.Any())
-{
-    <table class="table table-striped">
-        <thead>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>📖 Książka</th>
+        <th>👤 Klient</th>
+        <th>📅 Data wypożyczenia</th>
+        <th>📅 Data zwrotu</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var loan in Model.Loans)
+    {
         <tr>
-            <th>Imię i nazwisko</th>
-            <th>E-mail</th>
-            <th>Liczba wypożyczeń</th>
-            <th>Akcje</th>
+            <td>@loan.Book.Title</td>
+            <td>@loan.Client.FirstName @loan.Client.LastName</td>
+            <td>@loan.LoanDate.ToShortDateString()</td>
+            <td>@(loan.ReturnDate?.ToShortDateString() ?? "—")</td>
+            <td>
+                <a asp-page="Details" asp-route-id="@loan.Id" class="btn btn-sm btn-info">🔍</a>
+                <a asp-page="Edit" asp-route-id="@loan.Id" class="btn btn-sm btn-warning">✏️</a>
+                <a asp-page="Delete" asp-route-id="@loan.Id" class="btn btn-sm btn-danger">🗑️</a>
+            </td>
         </tr>
-        </thead>
-        <tbody>
-        @foreach (var client in Model.Clients)
-        {
-            <tr>
-                <td>@client.FirstName @client.LastName</td>
-                <td>@client.Email</td>
-                <td>@client.Loans.Count</td>
-                <td>
-                    <a asp-page="Details" asp-route-id="@client.Id" class="btn btn-sm btn-info">🔍 Szczegóły</a>
-                    <a asp-page="Edit" asp-route-id="@client.Id" class="btn btn-sm btn-warning">✏️ Edytuj</a>
-                    <a asp-page="Delete" asp-route-id="@client.Id" class="btn btn-sm btn-danger">🗑️ Usuń</a>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
-else
-{
-    <div class="alert alert-warning">Brak klientów do wyświetlenia.</div>
-}
+    }
+    </tbody>
+</table>

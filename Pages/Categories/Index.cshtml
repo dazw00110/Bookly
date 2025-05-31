@@ -4,13 +4,11 @@
     ViewData["Title"] = "Kategorie";
 }
 
-<h1 class="mb-4">🏷 Kategorie książek</h1>
+<h2 class="mb-4">📂 Kategorie</h2>
 
-<p>
-    <a asp-page="Create" class="btn btn-success">➕ Dodaj kategorię</a>
-</p>
+<a asp-page="Create" class="btn btn-success mb-3">➕ Dodaj nową kategorię</a>
 
-@if (Model.Categories != null && Model.Categories.Any())
+@if (Model.Categories.Any())
 {
     <table class="table table-striped">
         <thead>
@@ -27,8 +25,9 @@
                 <td>@category.Name</td>
                 <td>@category.BookCategories.Count</td>
                 <td>
-                    <a class="btn btn-sm btn-primary" asp-page="Edit" asp-route-id="@category.Id">✏️ Edytuj</a>
-                    <a class="btn btn-sm btn-danger" asp-page="Delete" asp-route-id="@category.Id">🗑 Usuń</a>
+                    <a asp-page="Details" asp-route-id="@category.Id" class="btn btn-sm btn-info">📚 Książki</a>
+                    <a asp-page="Edit" asp-route-id="@category.Id" class="btn btn-sm btn-warning">✏️ Edytuj</a>
+                    <a asp-page="Delete" asp-route-id="@category.Id" class="btn btn-sm btn-danger">🗑️ Usuń</a>
                 </td>
             </tr>
         }
@@ -37,5 +36,5 @@
 }
 else
 {
-    <p class="text-muted">Brak kategorii w bazie danych.</p>
+    <div class="alert alert-warning">Brak kategorii do wyświetlenia.</div>
 }

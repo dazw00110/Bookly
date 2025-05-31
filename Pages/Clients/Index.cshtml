@@ -1,33 +1,35 @@
 ﻿@page
-@model Bookly.Pages.Categories.IndexModel
+@model Bookly.Pages.Clients.IndexModel
 @{
-    ViewData["Title"] = "Kategorie";
+    ViewData["Title"] = "Lista klientów";
 }
 
-<h2 class="mb-4">📂 Kategorie</h2>
+<h2 class="mb-4">👤 Klienci</h2>
 
-<a asp-page="Create" class="btn btn-success mb-3">➕ Dodaj nową kategorię</a>
+<a asp-page="Create" class="btn btn-success mb-3">➕ Dodaj klienta</a>
 
-@if (Model.Categories.Any())
+@if (Model.Clients.Any())
 {
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Nazwa</th>
-            <th>Liczba książek</th>
+            <th>Imię i nazwisko</th>
+            <th>E-mail</th>
+            <th>Liczba wypożyczeń</th>
             <th>Akcje</th>
         </tr>
         </thead>
         <tbody>
-        @foreach (var category in Model.Categories)
+        @foreach (var client in Model.Clients)
         {
             <tr>
-                <td>@category.Name</td>
-                <td>@category.BookCategories.Count</td>
+                <td>@client.FirstName @client.LastName</td>
+                <td>@client.Email</td>
+                <td>@client.Loans.Count</td>
                 <td>
-                    <a asp-page="Details" asp-route-id="@category.Id" class="btn btn-sm btn-info">📚 Książki</a>
-                    <a asp-page="Edit" asp-route-id="@category.Id" class="btn btn-sm btn-warning">✏️ Edytuj</a>
-                    <a asp-page="Delete" asp-route-id="@category.Id" class="btn btn-sm btn-danger">🗑️ Usuń</a>
+                    <a asp-page="Details" asp-route-id="@client.Id" class="btn btn-sm btn-info">🔍 Szczegóły</a>
+                    <a asp-page="Edit" asp-route-id="@client.Id" class="btn btn-sm btn-warning">✏️ Edytuj</a>
+                    <a asp-page="Delete" asp-route-id="@client.Id" class="btn btn-sm btn-danger">🗑️ Usuń</a>
                 </td>
             </tr>
         }
@@ -36,5 +38,5 @@
 }
 else
 {
-    <div class="alert alert-warning">Brak kategorii do wyświetlenia.</div>
+    <div class="alert alert-warning">Brak klientów do wyświetlenia.</div>
 }

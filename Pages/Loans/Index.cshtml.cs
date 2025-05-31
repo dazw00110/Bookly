@@ -3,7 +3,7 @@ using Bookly.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bookly.Pages.Clients;
+namespace Bookly.Pages.Loans;
 
 public class IndexModel : PageModel
 {
@@ -14,13 +14,13 @@ public class IndexModel : PageModel
         _context = context;
     }
 
-    public List<Client> Clients { get; set; } = new();
+    public List<Loan> Loans { get; set; } = [];
 
     public async Task OnGetAsync()
     {
-        Clients = await _context.Clients
-            .Include(c => c.Loans)
-            .ThenInclude(l => l.Book)
+        Loans = await _context.Loans
+            .Include(l => l.Client)
+            .Include(l => l.Book)
             .ToListAsync();
     }
 }

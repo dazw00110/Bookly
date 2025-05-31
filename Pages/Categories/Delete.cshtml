@@ -11,6 +11,9 @@
 <dl class="row">
     <dt class="col-sm-3">Nazwa:</dt>
     <dd class="col-sm-9">@Model.Category.Name</dd>
+
+    <dt class="col-sm-3">Liczba przypisanych książek:</dt>
+    <dd class="col-sm-9">@Model.Category.BookCategories.Count</dd>
 </dl>
 
 <form method="post">

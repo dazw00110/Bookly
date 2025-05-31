@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bookly.Pages.Clients;
+namespace Bookly.Pages.Loans;
 
 public class DeleteModel : PageModel
 {
@@ -16,29 +16,39 @@ public class DeleteModel : PageModel
     }
 
     [BindProperty]
-    public Client Client { get; set; } = new();
+    public Loan Loan { get; set; } = null!;
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
-        var client = await _context.Clients
-            .Include(c => c.Loans)
-            .FirstOrDefaultAsync(c => c.Id == id);
+        var loan = await _context.Loans
+            .Include(l => l.Book)
+            .Include(l => l.Client)
+            .FirstOrDefaultAsync(l => l.Id == id);
 
-        if (client == null)
+        if (loan == null)
         {
             return NotFound();
         }
 
-        Client = client;
+        Loan = loan;
         return Page();
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
-        var client = await _context.Clients.FindAsync(Client.Id);
-        if (client != null)
+        var loan = await _context.Loans
+            .Include(l => l.Book)
+            .FirstOrDefaultAsync(l => l.Id == Loan.Id);
+
+        if (loan != null)
         {
-            _context.Clients.Remove(client);
+            // Jeśli nie był zwrócony, zwróć książkę przed usunięciem wypożyczenia
+            if (loan.ReturnDate == null)
+            {
+                loan.Book.IsBorrowed = false;
+            }
+
+            _context.Loans.Remove(loan);
             await _context.SaveChangesAsync();
         }
 

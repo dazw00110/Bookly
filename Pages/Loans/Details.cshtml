@@ -1,46 +1,19 @@
-﻿@page "{id:int}"
-@model Bookly.Pages.Clients.DetailsModel
+﻿@page
+@model Bookly.Pages.Loans.DetailsModel
 @{
-    ViewData["Title"] = "Szczegóły klienta";
+    ViewData["Title"] = "Szczegóły wypożyczenia";
 }
 
-<h2>📋 Szczegóły klienta</h2>
+<h2>🔍 Szczegóły wypożyczenia</h2>
 
-<dl class="row">
-    <dt class="col-sm-3">Imię i nazwisko:</dt>
-    <dd class="col-sm-9">@Model.Client.FirstName @Model.Client.LastName</dd>
+<div class="mb-3">
+    <strong>Książka:</strong> @Model.Loan.Book.Title<br />
+    <strong>Autor:</strong> @Model.Loan.Book.Author<br />
+    <strong>Klient:</strong> @Model.Loan.Client.FirstName @Model.Loan.Client.LastName<br />
+    <strong>Email:</strong> @Model.Loan.Client.Email<br />
+    <strong>Data wypożyczenia:</strong> @Model.Loan.LoanDate.ToShortDateString()<br />
+    <strong>Data zwrotu:</strong> @(Model.Loan.ReturnDate?.ToShortDateString() ?? "—")
+</div>
 
-    <dt class="col-sm-3">E-mail:</dt>
-    <dd class="col-sm-9">@Model.Client.Email</dd>
-</dl>
-
-<h4>📚 Wypożyczone książki:</h4>
-
-@if (Model.Client.Loans.Any())
-{
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Tytuł</th>
-            <th>Data wypożyczenia</th>
-            <th>Data zwrotu</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var loan in Model.Client.Loans)
-        {
-            <tr>
-                <td>@loan.Book.Title</td>
-                <td>@loan.LoanDate.ToShortDateString()</td>
-                <td>
-                    @(loan.ReturnDate.HasValue ? loan.ReturnDate.Value.ToShortDateString() : "Nie zwrócono")
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
-else
-{
-    <div class="alert alert-info">Ten klient nie ma aktywnych wypożyczeń.</div>
-}
+<a asp-page="Edit" asp-route-id="@Model.Loan.Id" class="btn btn-warning">✏️ Edytuj</a>
+<a asp-page="Index" class="btn btn-secondary">← Wróć</a>

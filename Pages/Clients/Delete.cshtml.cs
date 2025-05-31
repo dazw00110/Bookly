@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bookly.Pages.Categories;
+namespace Bookly.Pages.Clients;
 
 public class DeleteModel : PageModel
 {
@@ -16,27 +16,29 @@ public class DeleteModel : PageModel
     }
 
     [BindProperty]
-    public Category Category { get; set; } = new();
+    public Client Client { get; set; } = new();
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
-        var category = await _context.Categories
-            .Include(c => c.BookCategories)
+        var client = await _context.Clients
+            .Include(c => c.Loans)
             .FirstOrDefaultAsync(c => c.Id == id);
 
-        if (category == null)
+        if (client == null)
+        {
             return NotFound();
+        }
 
-        Category = category;
+        Client = client;
         return Page();
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
-        var category = await _context.Categories.FindAsync(Category.Id);
-        if (category != null)
+        var client = await _context.Clients.FindAsync(Client.Id);
+        if (client != null)
         {
-            _context.Categories.Remove(category);
+            _context.Clients.Remove(client);
             await _context.SaveChangesAsync();
         }
 

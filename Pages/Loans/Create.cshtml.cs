@@ -2,8 +2,10 @@ using Bookly.Data;
 using Bookly.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
-namespace Bookly.Pages.Clients;
+namespace Bookly.Pages.Loans;
 
 public class CreateModel : PageModel
 {
@@ -15,23 +17,34 @@ public class CreateModel : PageModel
     }
 
     [BindProperty]
-    public Client Client { get; set; } = new();
+    public Loan Loan { get; set; } = new();
 
-    public IActionResult OnGet() => Page();
+    public SelectList Clients { get; set; } = null!;
+    public SelectList Books { get; set; } = null!;
+
+    public async Task<IActionResult> OnGetAsync()
+    {
+        Clients = new SelectList(await _context.Clients.ToListAsync(), "Id", "Email");
+        Books = new SelectList(await _context.Books.Where(b => !b.IsBorrowed).ToListAsync(), "Id", "Title");
+
+        return Page();
+    }
 
     public async Task<IActionResult> OnPostAsync()
     {
-        if (_context.Clients.Any(c => c.Email == Client.Email))
+        var book = await _context.Books.FindAsync(Loan.BookId);
+        if (book == null || book.IsBorrowed)
         {
-            ModelState.AddModelError("Client.Email", "Podany adres e-mail już istnieje.");
+            ModelState.AddModelError("", "Wybrana książka jest już wypożyczona.");
+            return Page();
         }
 
-        if (!ModelState.IsValid)
-            return Page();
+        Loan.LoanDate = DateTime.UtcNow.Date; // ✅ Ustawienie daty w UTC
 
-        _context.Clients.Add(Client);
+        _context.Loans.Add(Loan);
+        book.IsBorrowed = true;
+
         await _context.SaveChangesAsync();
-
         return RedirectToPage("Index");
     }
 }

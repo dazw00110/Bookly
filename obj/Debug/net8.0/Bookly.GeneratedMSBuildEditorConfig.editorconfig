@@ -66,12 +66,52 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2F0ZWdvcmllc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/Zadania/SEMESTR 4/C\#/Projekt4/aktualne/Bookly/Pages/Clients/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2xpZW50c1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Zadania/SEMESTR 4/C\#/Projekt4/aktualne/Bookly/Pages/Clients/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2xpZW50c1xEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Zadania/SEMESTR 4/C\#/Projekt4/aktualne/Bookly/Pages/Clients/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2xpZW50c1xEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Zadania/SEMESTR 4/C\#/Projekt4/aktualne/Bookly/Pages/Clients/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2xpZW50c1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Zadania/SEMESTR 4/C\#/Projekt4/aktualne/Bookly/Pages/Clients/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2xpZW50c1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/Zadania/SEMESTR 4/C\#/Projekt4/aktualne/Bookly/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/Zadania/SEMESTR 4/C\#/Projekt4/aktualne/Bookly/Pages/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Zadania/SEMESTR 4/C\#/Projekt4/aktualne/Bookly/Pages/Loans/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9hbnNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Zadania/SEMESTR 4/C\#/Projekt4/aktualne/Bookly/Pages/Loans/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9hbnNcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Zadania/SEMESTR 4/C\#/Projekt4/aktualne/Bookly/Pages/Loans/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9hbnNcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Zadania/SEMESTR 4/C\#/Projekt4/aktualne/Bookly/Pages/Loans/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9hbnNcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Zadania/SEMESTR 4/C\#/Projekt4/aktualne/Bookly/Pages/Loans/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9hbnNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/Zadania/SEMESTR 4/C\#/Projekt4/aktualne/Bookly/Pages/Privacy.cshtml]

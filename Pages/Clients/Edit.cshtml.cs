@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bookly.Pages.Categories;
+namespace Bookly.Pages.Clients;
 
 public class EditModel : PageModel
 {
@@ -16,25 +16,52 @@ public class EditModel : PageModel
     }
 
     [BindProperty]
-    public Category Category { get; set; } = new();
+    public Client Client { get; set; } = null!;
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
-        var category = await _context.Categories.FindAsync(id);
-        if (category == null)
+        var client = await _context.Clients.FindAsync(id);
+        if (client == null)
+        {
             return NotFound();
+        }
 
-        Category = category;
+        Client = client;
         return Page();
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
         if (!ModelState.IsValid)
+        {
             return Page();
+        }
 
-        _context.Attach(Category).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
+        // Sprawdzenie unikalności e-maila (opcjonalnie)
+        var existing = await _context.Clients
+            .Where(c => c.Id != Client.Id)
+            .AnyAsync(c => c.Email == Client.Email);
+
+        if (existing)
+        {
+            ModelState.AddModelError("Client.Email", "Podany adres e-mail jest już używany.");
+            return Page();
+        }
+
+        _context.Attach(Client).State = EntityState.Modified;
+
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!await _context.Clients.AnyAsync(e => e.Id == Client.Id))
+            {
+                return NotFound();
+            }
+            throw;
+        }
 
         return RedirectToPage("Index");
     }

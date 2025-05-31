@@ -1,0 +1,43 @@
+## ASP.NET Core / C# ##
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Rider / JetBrains ##
+.idea/
+*.sln.iml
+
+## macOS / Windows system files ##
+.DS_Store
+Thumbs.db
+
+## Environment / Secrets ##
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.json
+secrets.json
+
+## EF Core Migrations Snapshots (opcjonalnie, jeśli generujesz tylko na lokalnie) ##
+**/Migrations/*.Designer.cs
+**/Migrations/*Snapshot.cs
+
+## Logs ##
+*.log
+
+## Database files (if using SQLite or similar for dev) ##
+*.db
+*.sqlite
+
+## Build / Publish artifacts ##
+*.publish/
+*.zip
+*.tar.gzd
+publish/
+
+appsettings.json
+appsettings.Development.json
+secrets.json

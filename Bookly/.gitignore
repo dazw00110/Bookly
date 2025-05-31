@@ -1,0 +1,40 @@
+## Build outputs
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+
+## Visual Studio
+.vscode/
+*.user
+*.suo
+
+## Entity Framework Migrations
+Migrations/*Designer.cs
+Migrations/*Snapshot.cs
+
+## Secrets / Konfiguracja / Hasła
+appsettings.json
+appsettings.Development.json
+!example_appsettings.json
+
+secrets.json
+*.dbmdl
+
+## Logs
+*.log
+logs/
+
+## OS
+.DS_Store
+Thumbs.db
+
+## Node/npm/yarn (jeśli używasz frontu)
+node_modules/
+package-lock.json
+yarn.lock
+
+## JetBrains Rider
+.idea/
+*.sln.iml

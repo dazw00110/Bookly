@@ -1,0 +1,69 @@
+﻿@page "{id:int}"
+@model Bookly.Pages.Books.DetailsModel
+@{
+    ViewData["Title"] = "Szczegóły książki";
+}
+
+<div class="d-flex justify-content-center">
+    <div class="card shadow-sm p-4 w-100" style="max-width: 700px;">
+        <h2 class="text-center text-primary mb-4">📖 Szczegóły książki</h2>
+
+        <dl class="row">
+            <dt class="col-sm-4">Tytuł:</dt>
+            <dd class="col-sm-8">@Model.Book.Title</dd>
+
+            <dt class="col-sm-4">Autor:</dt>
+            <dd class="col-sm-8">@Model.Book.Author</dd>
+
+            <dt class="col-sm-4">Rok:</dt>
+            <dd class="col-sm-8">@Model.Book.Year</dd>
+
+            <dt class="col-sm-4">Status:</dt>
+            <dd class="col-sm-8">
+                @(Model.Book.IsBorrowed ? "Wypożyczona" : "Dostępna")
+            </dd>
+
+            <dt class="col-sm-4">Kategorie:</dt>
+            <dd class="col-sm-8">
+                @if (Model.Book.BookCategories.Any())
+                {
+                    @string.Join(", ", Model.Book.BookCategories.Select(bc => bc.Category.Name))
+                }
+                else
+                {
+                    <span class="text-muted">brak</span>
+                }
+            </dd>
+        </dl>
+
+        <div class="mt-4 mb-3 d-flex justify-content-center">
+            <a asp-page="Edit" asp-route-id="@Model.Book.Id" class="btn btn-primary me-2">✏️ Edytuj</a>
+            <a asp-page="Index" class="btn btn-secondary">↩️ Wróć</a>
+        </div>
+
+        @* Sekcja historii wypożyczeń *@
+        @if (Model.Book.Loans != null && Model.Book.Loans.Any())
+        {
+            <hr />
+            <h5 class="text-muted mb-2">📚 Historia wypożyczeń:</h5>
+            <ul class="list-group list-group-flush">
+                @foreach (var loan in Model.Book.Loans)
+                {
+                    <li class="list-group-item">
+                        Wypożyczona przez
+                        <strong>@loan.Client?.FirstName @loan.Client?.LastName</strong>
+                        dnia <strong>@loan.LoanDate.ToShortDateString()</strong>
+                        @if (loan.ReturnDate != null)
+                        {
+                            <span> — zwrócono: <strong>@loan.ReturnDate.Value.ToShortDateString()</strong></span>
+                        }
+                        else
+                        {
+                            <span class="text-danger"> — nadal wypożyczona</span>
+                        }
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>

@@ -13,7 +13,7 @@ public class Book
     public string Author { get; set; } = null!;
 
     [Required]
-    [Range(1000, 2100)]
+    [Range(1000, 2025)]
     public int Year { get; set; }
 
     public bool IsBorrowed { get; set; } = false;

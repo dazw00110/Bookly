@@ -1,0 +1,52 @@
+﻿@page "{id:int}"
+@model Bookly.Pages.Books.EditModel
+@{
+    ViewData["Title"] = "Edytuj książkę";
+}
+
+<h1>✏️ Edytuj książkę</h1>
+
+<form method="post">
+    <input type="hidden" asp-for="Book.Id" />
+
+    <div class="mb-3">
+        <label asp-for="Book.Title" class="form-label"></label>
+        <input asp-for="Book.Title" class="form-control" />
+        <span asp-validation-for="Book.Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Book.Author" class="form-label"></label>
+        <input asp-for="Book.Author" class="form-control" />
+        <span asp-validation-for="Book.Author" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Book.Year" class="form-label"></label>
+        <input asp-for="Book.Year" class="form-control" type="number" min="1000" max="2025" />
+        <span asp-validation-for="Book.Year" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Kategorie</label>
+        @foreach (var category in Model.AllCategories)
+        {
+            <div class="form-check">
+                <input class="form-check-input"
+                       type="checkbox"
+                       name="SelectedCategoryIds"
+                       value="@category.Id"
+                       id="cat_@category.Id"
+                       @(Model.SelectedCategoryIds.Contains(category.Id) ? "checked" : "") />
+                <label class="form-check-label" for="cat_@category.Id">@category.Name</label>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-primary">Zapisz</button>
+    <a asp-page="Index" class="btn btn-secondary">Anuluj</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

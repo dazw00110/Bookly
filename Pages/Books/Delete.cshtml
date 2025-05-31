@@ -1,0 +1,45 @@
+﻿@page "{id:int}"
+@model Bookly.Pages.Books.DeleteModel
+@{
+    ViewData["Title"] = "Usuń książkę";
+}
+
+<div class="d-flex justify-content-center">
+    <div class="card shadow-sm p-4 w-100" style="max-width: 700px;">
+        <h2 class="text-center text-danger mb-4">🗑 Czy na pewno chcesz usunąć tę książkę?</h2>
+
+        <dl class="row">
+            <dt class="col-sm-4">Tytuł:</dt>
+            <dd class="col-sm-8">@Model.Book.Title</dd>
+
+            <dt class="col-sm-4">Autor:</dt>
+            <dd class="col-sm-8">@Model.Book.Author</dd>
+
+            <dt class="col-sm-4">Rok:</dt>
+            <dd class="col-sm-8">@Model.Book.Year</dd>
+
+            <dt class="col-sm-4">Status:</dt>
+            <dd class="col-sm-8">
+                @(Model.Book.IsBorrowed ? "Wypożyczona" : "Dostępna")
+            </dd>
+
+            <dt class="col-sm-4">Kategorie:</dt>
+            <dd class="col-sm-8">
+                @if (Model.Book.BookCategories.Any())
+                {
+                    @string.Join(", ", Model.Book.BookCategories.Select(bc => bc.Category.Name))
+                }
+                else
+                {
+                    <span class="text-muted">brak</span>
+                }
+            </dd>
+        </dl>
+
+        <form method="post" class="mt-4 d-flex justify-content-center gap-3">
+            <input type="hidden" asp-for="Book.Id" />
+            <button type="submit" class="btn btn-danger">🗑 Usuń</button>
+            <a asp-page="Index" class="btn btn-secondary">↩️ Anuluj</a>
+        </form>
+    </div>
+</div>

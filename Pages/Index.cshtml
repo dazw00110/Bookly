@@ -1,10 +1,88 @@
 ﻿@page
-@model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Strona główna";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    .card-hover:hover {
+        transform: scale(1.02);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease-in-out;
+    }
+</style>
+
+<div class="text-center mt-5">
+    <h1 class="display-1 fw-bold text-primary">BOOKLY</h1>
+    <p class="lead mt-3">System biblioteczny do zarządzania książkami, kategoriami, klientami i wypożyczeniami.</p>
+
+    <hr class="my-4" />
+
+    <h4>Przejdź do sekcji:</h4>
+    <div class="row row-cols-1 row-cols-md-4 g-4 mt-4">
+
+        <!-- KSIĄŻKI -->
+        <div class="col">
+            <a asp-page="/Books/Index" class="text-decoration-none text-dark">
+                <div class="card h-100 shadow-sm card-hover">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">📚 Książki</h5>
+                        <p class="card-text">Zarządzaj książkami biblioteki.</p>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1604866830893-c13cafa515d5?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0"
+                         class="card-img-bottom"
+                         alt="Książki"
+                         style="height: 180px; object-fit: cover;">
+                </div>
+            </a>
+        </div>
+
+        <!-- KATEGORIE -->
+        <div class="col">
+            <a asp-page="/Categories/Index" class="text-decoration-none text-dark">
+                <div class="card h-100 shadow-sm card-hover">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">🏷 Kategorie</h5>
+                        <p class="card-text">Zarządzaj kategoriami książek.</p>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0"
+                         class="card-img-bottom"
+                         alt="Kategorie"
+                         style="height: 180px; object-fit: cover;">
+                </div>
+            </a>
+        </div>
+
+        <!-- KLIENCI -->
+        <div class="col">
+            <a asp-page="/Clients/Index" class="text-decoration-none text-dark">
+                <div class="card h-100 shadow-sm card-hover">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">👤 Klienci</h5>
+                        <p class="card-text">Zarządzaj czytelnikami biblioteki.</p>
+                    </div>
+                    <img src="https://plus.unsplash.com/premium_photo-1664300897489-fd98eee64faf?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                         class="card-img-bottom"
+                         alt="Klienci"
+                         style="height: 180px; object-fit: cover;">
+                </div>
+            </a>
+        </div>
+
+        <!-- WYPOŻYCZENIA -->
+        <div class="col">
+            <a asp-page="/Loans/Index" class="text-decoration-none text-dark">
+                <div class="card h-100 shadow-sm card-hover">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">🔄 Wypożyczenia</h5>
+                        <p class="card-text">Obsługuj wypożyczenia i zwroty książek.</p>
+                    </div>
+                    <img src="https://plus.unsplash.com/premium_photo-1661927233118-27cae9fea05c?q=80&w=2111&auto=format&fit=crop&ixlib=rb-4.1.0"
+                         class="card-img-bottom"
+                         alt="Wypożyczenia"
+                         style="height: 180px; object-fit: cover;">
+                </div>
+            </a>
+        </div>
+
+    </div>
 </div>

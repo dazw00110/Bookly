@@ -134,7 +134,8 @@ https://localhost:5001
 
 ## 📁 Struktura projektu 
 Tak wygląda struktura projektu Bookly:
-![img.png](img/img.png)
+
+![0.PNG](img/0.PNG)
 
 Oto krótki opis wszystkich kluczowych folderów i plików projektu:
 
@@ -227,76 +228,75 @@ Po uruchomieniu aplikacji w bazie pojawi się przykładowe:
 
 ## 🖥️ Zrzuty ekranu
 ### Strona główna aplikacji:
-![img.png](img/img.png)
-
+![1.PNG](img/1.PNG)
 ### Podstrona książek:
 #### Strona główna:
-![img_1.png](img/img_1.png)
+![img_1.PNG](img/2.PNG)
 
 ### Funkcjonalności Książki:
-#### Dodawanie książki:
-![img_2.png](img/img_2.png)
+#### Dodanie książki:
+![img_2.PNG](img/3.PNG)
 
 #### Szczegóły książki:
-![img_3.png](img/img_3.png)
+![img_3.PNG](img/4.PNG)
 
 #### Edycja książki:
-![img_4.png](img/img_4.png)
+![img_4.PNG](img/5.PNG)
 
 #### Uusuwanie książki:
-![img_5.png](img/img_5.png)
+![img_5.PNG](img/6.PNG)
 
 ### Podstrona kategorii:
 #### Strona główna:
-![img_6.png](img/img_6.png)
+![img_6.PNG](img/7.PNG)
 
 ### Funkcjonalności Kategorii:
 #### Dodawanie kategorii:
-![img_8.png](img/img_8.png)
+![img_8.PNG](img/8.PNG)
 
 #### Edycja kategorii:
-![img_9.png](img/img_9.png)
+![img_9.PNG](img/9.PNG)
 
 #### Usuwanie kategorii:
-![img_10.png](img/img_10.png)
+![img_10.PNG](img/10.PNG)
 
 #### Szczegóły kategorii:
-![img_11.png](img/img_11.png)
+![img_11.PNG](img/11.PNG)
 
 ### Podstrona klientów:
 #### Strona główna:
-![img_12.png](img/img_12.png)
+![img_12.PNG](img/12.PNG)
 
 ### Funkcjonalności Klientów:
 #### Dodawanie klienta:
-![img_13.png](img/img_13.png)
+![img_13.PNG](img/13.PNG)
 
 #### Edycja klienta:
-![img_14.png](img/img_14.png)
+![img_14.PNG](img/14.PNG)
 
 #### Usuwanie klienta:
-![img_15.png](img/img_15.png)
+![img_15.PNG](img/15.PNG)
 
 #### Szczegóły klienta:
-![img_16.png](img/img_16.png)
+![img_16.PNG](img/16.PNG)
 
 ### Podstrona wypożyczeń:
 #### Strona główna:
-![img_17.png](img/img_17.png)
+![img_17.PNG](img/17.PNG)
 
 ### Funkcjonalności wypożyczeń:
 #### Szczegóły wypożyczenia:
-![img_20.png](img/img_20.png)
+![img_18.PNG](img/18.PNG)
 
 #### Dodawanie wypożyczenia:
-![img_18.png](img/img_18.png)
+![img_19.PNG](img/19.PNG)
 
 #### Edycja wypożyczenia:
-![img_19.png](img/img_19.png)
+![img_20.PNG](img/20.PNG)
 
 #### Usuwanie wypożyczenia:
-![img_21.png](img/img_21.png)
+![img_21.PNG](img/21.PNG)
 
 #### Zwrot wypożyczenia:
-![img_22.png](img/img_22.png)
+![img_22.PNG](img/22.PNG)
 

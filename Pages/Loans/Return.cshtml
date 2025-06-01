@@ -6,24 +6,33 @@
 
 <h2>📘 Zwrot książki</h2>
 
-<div class="alert alert-info">
-    <strong>Książka:</strong> @Model.Loan.Book.Title<br />
-    <strong>Klient:</strong> @Model.Loan.Client.FirstName @Model.Loan.Client.LastName<br />
-    <strong>Data wypożyczenia:</strong> @Model.Loan.LoanDate.ToShortDateString()
-</div>
-
-<form method="post">
-    <div class="mb-3">
-        <label asp-for="Loan.ReturnDate" class="form-label">Data zwrotu</label>
-        <input asp-for="Loan.ReturnDate" class="form-control" type="date"
-               min="@Model.Loan.LoanDate.ToString("yyyy-MM-dd")"
-               max="@DateTime.UtcNow.ToString("yyyy-MM-dd")" />
-        <span asp-validation-for="Loan.ReturnDate" class="text-danger"></span>
+@if (Model.Loan == null || Model.Loan.Book == null || Model.Loan.Client == null)
+{
+    <div class="alert alert-danger">
+        Wystąpił błąd ładowania danych wypożyczenia.
     </div>
-    <button type="submit" class="btn btn-primary">Potwierdź zwrot</button>
-    <a asp-page="Index" class="btn btn-secondary">Anuluj</a>
-</form>
+}
+else
+{
+    <div class="alert alert-info">
+        <strong>Książka:</strong> @Model.Loan.Book.Title<br />
+        <strong>Klient:</strong> @Model.Loan.Client.FirstName @Model.Loan.Client.LastName<br />
+        <strong>Data wypożyczenia:</strong> @Model.Loan.LoanDate.ToShortDateString()
+    </div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <form method="post">
+        <input type="hidden" name="loanId" value="@Model.Loan.Id" />
+
+        <div class="mb-3">
+            <label for="returnDate" class="form-label">Data zwrotu</label>
+            <input name="returnDate" id="returnDate" class="form-control" type="date"
+                   value="@Model.Loan.ReturnDate?.ToString("yyyy-MM-dd")"
+                   min="@Model.Loan.LoanDate.ToString("yyyy-MM-dd")"
+                   max="@DateTime.UtcNow.ToString("yyyy-MM-dd")"
+                   required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Potwierdź zwrot</button>
+        <a asp-page="Index" class="btn btn-secondary">Anuluj</a>
+    </form>
 }

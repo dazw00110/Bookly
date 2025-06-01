@@ -15,53 +15,77 @@ public class ReturnModel : PageModel
         _context = context;
     }
 
-    [BindProperty]
-    public Loan Loan { get; set; } = default!;
+    public Loan? Loan { get; set; }
 
     public async Task<IActionResult> OnGetAsync(int? id)
     {
         if (id == null)
         {
+            Console.WriteLine("❌ OnGetAsync: ID jest null");
+            return NotFound();
+        }
+
+        Loan = await _context.Loans
+            .Include(l => l.Book)
+            .Include(l => l.Client)
+            .FirstOrDefaultAsync(l => l.Id == id);
+
+        if (Loan == null)
+        {
+            Console.WriteLine($"❌ OnGetAsync: Loan ID={id} nie znaleziony");
+            return NotFound();
+        }
+
+        Console.WriteLine($"✅ OnGetAsync: Loan załadowany (ID: {id})");
+        return Page();
+    }
+
+    public async Task<IActionResult> OnPostAsync()
+    {
+        var form = Request.Form;
+
+        if (!int.TryParse(form["loanId"], out int loanId))
+        {
+            Console.WriteLine("❌ OnPostAsync: Brak loanId w formularzu");
             return NotFound();
         }
 
         var loan = await _context.Loans
             .Include(l => l.Book)
             .Include(l => l.Client)
-            .FirstOrDefaultAsync(m => m.Id == id);
+            .FirstOrDefaultAsync(l => l.Id == loanId);
 
         if (loan == null)
         {
+            Console.WriteLine($"❌ OnPostAsync: Loan ID={loanId} nie znaleziony");
             return NotFound();
         }
 
-        Loan = loan;
-        return Page();
-    }
-
-    public async Task<IActionResult> OnPostAsync(int id)
-    {
-        var loanToUpdate = await _context.Loans
-            .Include(l => l.Book)
-            .Include(l => l.Client)
-            .FirstOrDefaultAsync(m => m.Id == id);
-
-        if (loanToUpdate == null)
+        if (!DateTime.TryParse(form["returnDate"], out DateTime returnDate))
         {
-            return NotFound();
+            Console.WriteLine("❌ OnPostAsync: Nieprawidłowa data zwrotu");
+            ModelState.AddModelError("returnDate", "Nieprawidłowa data.");
+            Loan = loan;
+            return Page();
         }
 
-        if (await TryUpdateModelAsync(
-                loanToUpdate,
-                "Loan",
-                l => l.ReturnDate))
+        // ✅ Rozwiązanie błędu PostgreSQL - wymuszenie UTC
+        returnDate = DateTime.SpecifyKind(returnDate, DateTimeKind.Utc);
+        loan.ReturnDate = returnDate;
+        loan.Book.IsBorrowed = false;
+
+        try
         {
-            loanToUpdate.Book.IsBorrowed = false;
             await _context.SaveChangesAsync();
+            Console.WriteLine($"✅ OnPostAsync: Zwrot Loan ID={loanId} zapisany.");
             return RedirectToPage("./Index");
         }
-
-        Loan = loanToUpdate;
-        return Page();
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ OnPostAsync: Błąd zapisu: {ex.Message}");
+            ModelState.AddModelError("", "Wystąpił błąd podczas zapisu.");
+            Loan = loan;
+            return Page();
+        }
     }
 }

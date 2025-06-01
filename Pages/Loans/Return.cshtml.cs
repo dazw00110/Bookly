@@ -1,8 +1,8 @@
-using Bookly.Data;
-using Bookly.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Bookly.Data;
+using Bookly.Models;
 
 namespace Bookly.Pages.Loans;
 
@@ -18,35 +18,50 @@ public class ReturnModel : PageModel
     [BindProperty]
     public Loan Loan { get; set; } = default!;
 
-    public async Task<IActionResult> OnGetAsync(int id)
+    public async Task<IActionResult> OnGetAsync(int? id)
     {
-        Loan = await _context.Loans
-            .Include(l => l.Book)
-            .Include(l => l.Client)
-            .FirstOrDefaultAsync(l => l.Id == id);
-
-        if (Loan == null)
+        if (id == null)
         {
             return NotFound();
         }
 
+        var loan = await _context.Loans
+            .Include(l => l.Book)
+            .Include(l => l.Client)
+            .FirstOrDefaultAsync(m => m.Id == id);
+
+        if (loan == null)
+        {
+            return NotFound();
+        }
+
+        Loan = loan;
         return Page();
     }
 
     public async Task<IActionResult> OnPostAsync(int id)
     {
-        var loan = await _context.Loans
+        var loanToUpdate = await _context.Loans
             .Include(l => l.Book)
-            .FirstOrDefaultAsync(l => l.Id == id);
+            .Include(l => l.Client)
+            .FirstOrDefaultAsync(m => m.Id == id);
 
-        if (loan == null)
+        if (loanToUpdate == null)
+        {
             return NotFound();
+        }
 
-        loan.ReturnDate = DateTime.UtcNow;
-        loan.Book.IsBorrowed = false;
+        if (await TryUpdateModelAsync(
+                loanToUpdate,
+                "Loan",
+                l => l.ReturnDate))
+        {
+            loanToUpdate.Book.IsBorrowed = false;
+            await _context.SaveChangesAsync();
+            return RedirectToPage("./Index");
+        }
 
-        await _context.SaveChangesAsync();
-
-        return RedirectToPage("./Index");
+        Loan = loanToUpdate;
+        return Page();
     }
 }

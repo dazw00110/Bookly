@@ -4,15 +4,26 @@
     ViewData["Title"] = "Zwrot książki";
 }
 
-<h2>📚 Zwrot książki</h2>
+<h2>📘 Zwrot książki</h2>
 
-<div class="alert alert-info mt-3">
-    Czy na pewno chcesz oznaczyć wypożyczenie książki 
-    <strong>@Model.Loan.Book.Title</strong> jako <strong>zwrócone</strong> przez 
-    <strong>@Model.Loan.Client.FullName</strong>?
+<div class="alert alert-info">
+    <strong>Książka:</strong> @Model.Loan.Book.Title<br />
+    <strong>Klient:</strong> @Model.Loan.Client.FirstName @Model.Loan.Client.LastName<br />
+    <strong>Data wypożyczenia:</strong> @Model.Loan.LoanDate.ToShortDateString()
 </div>
 
-<form method="post" class="mt-3">
-    <button type="submit" class="btn btn-success">✅ Potwierdź zwrot</button>
-    <a asp-page="./Index" class="btn btn-secondary">Anuluj</a>
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Loan.ReturnDate" class="form-label">Data zwrotu</label>
+        <input asp-for="Loan.ReturnDate" class="form-control" type="date"
+               min="@Model.Loan.LoanDate.ToString("yyyy-MM-dd")"
+               max="@DateTime.UtcNow.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="Loan.ReturnDate" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Potwierdź zwrot</button>
+    <a asp-page="Index" class="btn btn-secondary">Anuluj</a>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

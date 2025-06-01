@@ -1,21 +1,39 @@
 ﻿@page "{id:int}"
 @model Bookly.Pages.Loans.EditModel
 @{
-    ViewData["Title"] = "Zwróć książkę";
+    ViewData["Title"] = "Edytuj wypożyczenie";
 }
 
-<h2>🔁 Zwróć książkę</h2>
+<h2>✏️ Edytuj wypożyczenie</h2>
 
 <form method="post">
     <input type="hidden" asp-for="Loan.Id" />
 
-    <div class="form-group">
-        <label asp-for="Loan.ReturnDate">Data zwrotu</label>
-        <input asp-for="Loan.ReturnDate" class="form-control" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
-        <span asp-validation-for="Loan.ReturnDate" class="text-danger"></span>
+    <div class="mb-3">
+        <label asp-for="Loan.ClientId" class="form-label"></label>
+        <select asp-for="Loan.ClientId" asp-items="Model.Clients" class="form-select"></select>
+        <span asp-validation-for="Loan.ClientId" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-success">📦 Zwróć</button>
+    <div class="mb-3">
+        <label asp-for="Loan.BookId" class="form-label"></label>
+        <select asp-for="Loan.BookId" asp-items="Model.Books" class="form-select"></select>
+        <span asp-validation-for="Loan.BookId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Loan.LoanDate" class="form-label"></label>
+        <input asp-for="Loan.LoanDate" type="date" class="form-control" max="@DateTime.UtcNow.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="Loan.LoanDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Loan.PlannedReturnDate" class="form-label"></label>
+        <input asp-for="Loan.PlannedReturnDate" type="date" class="form-control" />
+        <span asp-validation-for="Loan.PlannedReturnDate" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">💾 Zapisz zmiany</button>
     <a asp-page="Index" class="btn btn-secondary">Anuluj</a>
 </form>
 

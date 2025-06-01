@@ -32,9 +32,9 @@
             <td>@category.Name</td>
             <td>@category.BookCategories.Count</td>
             <td>
+                <a asp-page="Details" asp-route-id="@category.Id" class="btn btn-sm btn-info">📚 Książki</a>
                 <a asp-page="Edit" asp-route-id="@category.Id" class="btn btn-sm btn-warning">Edytuj</a>
                 <a asp-page="Delete" asp-route-id="@category.Id" class="btn btn-sm btn-danger">Usuń</a>
-                <a asp-page="/Books/Index" asp-route-SelectedCategoryIds="@category.Id" class="btn btn-sm btn-info">📚 Książki</a>
             </td>
         </tr>
     }

@@ -15,7 +15,7 @@ public class DetailsModel : PageModel
         _context = context;
     }
 
-    public Client Client { get; set; } = null!;
+    public Client? Client { get; set; }
     public List<Loan> Loans { get; set; } = [];
 
     public async Task<IActionResult> OnGetAsync(int id)

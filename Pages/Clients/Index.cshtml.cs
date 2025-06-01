@@ -45,7 +45,7 @@ public class IndexModel : PageModel
 
         if (MinLoanCount.HasValue)
         {
-            query = query.Where(c => c.Loans.Count > MinLoanCount.Value);
+            query = query.Where(c => c.Loans.Count == MinLoanCount.Value);
         }
 
         query = (SortBy, SortDesc) switch
@@ -60,7 +60,6 @@ public class IndexModel : PageModel
             ("count", true) => query.OrderByDescending(c => c.Loans.Count),
             _ => query.OrderBy(c => c.FirstName)
         };
-
 
         Clients = await query.ToListAsync();
     }

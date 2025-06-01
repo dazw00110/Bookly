@@ -6,6 +6,8 @@
 
 <h2 class="mb-4">📚 Lista książek</h2>
 
+<a asp-page="Create" class="btn btn-primary mb-3">➕ Dodaj nową książkę</a>
+
 <form method="get" class="mb-4 border rounded p-3 bg-light">
     <input type="hidden" name="SortBy" value="@Model.SortBy" />
     <input type="hidden" name="SortDesc" value="@Model.SortDesc" />
@@ -58,7 +60,6 @@
     </div>
 </form>
 
-<a asp-page="Create" class="btn btn-primary mb-3">➕ Dodaj nową książkę</a>
 
 @if (Model.Books.Any())
 {

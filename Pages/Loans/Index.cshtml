@@ -6,17 +6,19 @@
 
 <h2 class="mb-4">📚 Lista wypożyczeń</h2>
 
-<form method="get" class="mb-4 border rounded p-3 bg-light">
+<a asp-page="Create" class="btn btn-primary mb-3">➕ Dodaj nowe wypożyczenie</a>
+
+<form method="get" class="mb-4">
     <input type="hidden" name="SortBy" value="@Model.SortBy" />
     <input type="hidden" name="SortDesc" value="@Model.SortDesc" />
 
-    <div class="row g-3">
+    <div class="row g-2 align-items-end">
         <div class="col-md-4">
-            <label class="form-label">Klient (imię, nazwisko)</label>
+            <label class="form-label">Klient</label>
             <input type="text" name="SearchClient" value="@Model.SearchClient" class="form-control" />
         </div>
         <div class="col-md-4">
-            <label class="form-label">Tytuł książki</label>
+            <label class="form-label">Książka</label>
             <input type="text" name="SearchBook" value="@Model.SearchBook" class="form-control" />
         </div>
         <div class="col-md-3">
@@ -27,22 +29,21 @@
                 <option value="returned" selected="@(Model.Status == "returned")">Zwrócone</option>
             </select>
         </div>
-        <div class="col-md-1 d-flex align-items-end">
+        <div class="col-md-1">
             <button type="submit" class="btn btn-primary w-100">🔍</button>
         </div>
     </div>
 </form>
 
-<a asp-page="Create" class="btn btn-primary mb-3">➕ Dodaj nowe wypożyczenie</a>
-
 @if (Model.Loans.Any())
 {
     <table class="table table-striped">
-        <thead>
+        <thead class="table-light">
             <tr>
                 <th><a asp-route-SortBy="book" asp-route-SortDesc="@(Model.SortBy == "book" && !Model.SortDesc)">📘 Książka</a></th>
                 <th><a asp-route-SortBy="client" asp-route-SortDesc="@(Model.SortBy == "client" && !Model.SortDesc)">👤 Klient</a></th>
                 <th><a asp-route-SortBy="loanDate" asp-route-SortDesc="@(Model.SortBy == "loanDate" && !Model.SortDesc)">📅 Data wypożyczenia</a></th>
+                <th><a asp-route-SortBy="plannedReturn" asp-route-SortDesc="@(Model.SortBy == "plannedReturn" && !Model.SortDesc)">📅 Planowany zwrot</a></th>
                 <th><a asp-route-SortBy="returnDate" asp-route-SortDesc="@(Model.SortBy == "returnDate" && !Model.SortDesc)">📅 Data zwrotu</a></th>
                 <th>Status</th>
                 <th>Akcje</th>
@@ -51,33 +52,55 @@
         <tbody>
             @foreach (var loan in Model.Loans)
             {
+                var plannedReturn = loan.LoanDate.AddDays(14);
+                string statusLabel;
+                string badgeClass;
+
+                if (loan.ReturnDate == null)
+                {
+                    if (DateTime.Now > plannedReturn)
+                    {
+                        statusLabel = "Zaległe";
+                        badgeClass = "bg-danger";
+                    }
+                    else
+                    {
+                        statusLabel = "Wypożyczone";
+                        badgeClass = "bg-warning text-dark";
+                    }
+                }
+                else if (loan.ReturnDate > plannedReturn)
+                {
+                    statusLabel = "Zwrócono po terminie";
+                    badgeClass = "bg-secondary";
+                }
+                else
+                {
+                    statusLabel = "Zwrócone";
+                    badgeClass = "bg-success";
+                }
+
                 <tr>
                     <td>@loan.Book.Title</td>
                     <td>@loan.Client.FirstName @loan.Client.LastName</td>
                     <td>@loan.LoanDate.ToShortDateString()</td>
+                    <td>@loan.PlannedReturnDate.ToShortDateString()</td>
                     <td>@(loan.ReturnDate?.ToShortDateString() ?? "—")</td>
+                    <td><span class="badge @badgeClass">@statusLabel</span></td>
                     <td>
-                        @if (loan.ReturnDate == null)
-                        {
-                            var due = loan.LoanDate.AddDays(14);
-                            if (DateTime.Now > due)
+                        <div class="d-flex gap-1">
+                            <a asp-page="Details" asp-route-id="@loan.Id" class="btn btn-sm btn-info w-100">🔍</a>
+                            <a asp-page="Edit" asp-route-id="@loan.Id" class="btn btn-sm btn-warning w-100">✏️</a>
+                            @if (loan.ReturnDate == null)
                             {
-                                <span class="badge bg-danger">Zaległe</span>
+                                <a asp-page="Return" asp-route-id="@loan.Id" class="btn btn-sm btn-primary w-100">📤</a>
                             }
                             else
                             {
-                                <span class="badge bg-warning text-dark">Wypożyczone</span>
+                                <span class="btn btn-sm btn-outline-secondary disabled w-100">📤</span>
                             }
-                        }
-                        else
-                        {
-                            <span class="badge bg-success">Zwrócone</span>
-                        }
-                    </td>
-                    <td>
-                        <a asp-page="Details" asp-route-id="@loan.Id" class="btn btn-sm btn-info">Szczegóły</a>
-                        <a asp-page="Edit" asp-route-id="@loan.Id" class="btn btn-sm btn-warning">Edytuj</a>
-                        <a asp-page="Return" asp-route-id="@loan.Id" class="btn btn-sm btn-primary">Zwrot</a>
+                            <a asp-page="Delete" asp-route-id="@loan.Id" class="btn btn-sm btn-danger w-100">🗑️</a>
+                        </div>
                     </td>
                 </tr>
             }

@@ -1,45 +1,39 @@
 ﻿@page "{id:int}"
-@model Bookly.Pages.Categories.BooksModel
+@model Bookly.Pages.Categories.DetailsModel
+
 @{
-    ViewData["Title"] = "Książki w kategorii";
+    ViewData["Title"] = "Szczegóły kategorii";
 }
 
-<h2 class="mb-4">📚 Książki w kategorii: <span class="text-primary">@Model.CategoryName</span></h2>
+<h2 class="mb-4">📚 Szczegóły kategorii: <span class="text-primary">
+    @{
+        System.Diagnostics.Debug.Assert(Model.Category != null, "Model.Category != null");
+    }
+    @Model.Category.Name</span></h2>
 
-@if (Model.Books.Any())
+@if (Model.Category.BookCategories.Any())
 {
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Tytuł</th>
-            <th>Autor</th>
-            <th>Rok</th>
-            <th>Status</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var book in Model.Books)
+    <h4>Książki w tej kategorii:</h4>
+    <ul class="list-group">
+        @foreach (var book in Model.Category.BookCategories.Select(bc => bc.Book))
         {
-            <tr>
-                <td>@book.Title</td>
-                <td>@book.Author</td>
-                <td>@book.Year</td>
-                <td>
-                    @if (book.IsBorrowed)
-                    {
-                        <span class="badge bg-danger">Wypożyczona</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-success">Dostępna</span>
-                    }
-                </td>
-            </tr>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>@book.Title – @book.Author (@book.Year)</span>
+                @if (book.IsBorrowed)
+                {
+                    <span class="badge bg-danger">Wypożyczona</span>
+                }
+                else
+                {
+                    <span class="badge bg-success">Dostępna</span>
+                }
+            </li>
         }
-        </tbody>
-    </table>
+    </ul>
 }
 else
 {
-    <div class="alert alert-warning">Brak książek przypisanych do tej kategorii.</div>
+    <p class="text-muted">Brak książek przypisanych do tej kategorii.</p>
 }
+
+<a asp-page="./Index" class="btn btn-secondary mt-4">⬅️ Powrót do listy kategorii</a>

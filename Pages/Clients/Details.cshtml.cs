@@ -16,20 +16,18 @@ public class DetailsModel : PageModel
     }
 
     public Client Client { get; set; } = null!;
+    public List<Loan> Loans { get; set; } = [];
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
-        var client = await _context.Clients
-            .Include(c => c.Loans)
-            .ThenInclude(l => l.Book)
-            .FirstOrDefaultAsync(c => c.Id == id);
+        Client = await _context.Clients.FindAsync(id);
+        if (Client == null) return NotFound();
 
-        if (client == null)
-        {
-            return NotFound();
-        }
+        Loans = await _context.Loans
+            .Include(l => l.Book)
+            .Where(l => l.ClientId == id)
+            .ToListAsync();
 
-        Client = client;
         return Page();
     }
 }

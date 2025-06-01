@@ -4,18 +4,31 @@
     ViewData["Title"] = "Lista klientów";
 }
 
-<h2 class="mb-4">👤 Klienci</h2>
+<h2>👤 Klienci</h2>
 
 <a asp-page="Create" class="btn btn-success mb-3">➕ Dodaj klienta</a>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-4">
+        <input name="SearchText" value="@Model.SearchText" class="form-control" placeholder="Imię, nazwisko lub e-mail" />
+    </div>
+    <div class="col-md-3">
+        <input type="number" name="MinLoanCount" value="@Model.MinLoanCount" class="form-control" placeholder="Min. liczba wypożyczeń" />
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-primary">🔍 Szukaj</button>
+    </div>
+</form>
 
 @if (Model.Clients.Any())
 {
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Imię i nazwisko</th>
-            <th>E-mail</th>
-            <th>Liczba wypożyczeń</th>
+            <th><a asp-route-SortBy="first" asp-route-SortDesc="@(Model.SortBy == "first" && !Model.SortDesc)">Imię</a></th>
+            <th><a asp-route-SortBy="last" asp-route-SortDesc="@(Model.SortBy == "last" && !Model.SortDesc)">Nazwisko</a></th>
+            <th><a asp-route-SortBy="email" asp-route-SortDesc="@(Model.SortBy == "email" && !Model.SortDesc)">E-mail</a></th>
+            <th><a asp-route-SortBy="count" asp-route-SortDesc="@(Model.SortBy == "count" && !Model.SortDesc)">Liczba wypożyczeń</a></th>
             <th>Akcje</th>
         </tr>
         </thead>
@@ -23,13 +36,14 @@
         @foreach (var client in Model.Clients)
         {
             <tr>
-                <td>@client.FirstName @client.LastName</td>
+                <td>@client.FirstName</td>
+                <td>@client.LastName</td>
                 <td>@client.Email</td>
                 <td>@client.Loans.Count</td>
                 <td>
                     <a asp-page="Details" asp-route-id="@client.Id" class="btn btn-sm btn-info">🔍 Szczegóły</a>
-                    <a asp-page="Edit" asp-route-id="@client.Id" class="btn btn-sm btn-warning">✏️ Edytuj</a>
-                    <a asp-page="Delete" asp-route-id="@client.Id" class="btn btn-sm btn-danger">🗑️ Usuń</a>
+                    <a asp-page="Edit" asp-route-id="@client.Id" class="btn btn-sm btn-warning">Edytuj</a>
+                    <a asp-page="Delete" asp-route-id="@client.Id" class="btn btn-sm btn-danger">Usuń</a>
                 </td>
             </tr>
         }
@@ -38,5 +52,5 @@
 }
 else
 {
-    <div class="alert alert-warning">Brak klientów do wyświetlenia.</div>
+    <p class="text-muted">Brak klientów do wyświetlenia.</p>
 }

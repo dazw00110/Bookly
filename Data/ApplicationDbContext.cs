@@ -20,11 +20,9 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Złożony klucz główny dla tabeli BookCategory
         modelBuilder.Entity<BookCategory>()
             .HasKey(bc => new { bc.BookId, bc.CategoryId });
 
-        // Relacja N:M Book-Category
         modelBuilder.Entity<BookCategory>()
             .HasOne(bc => bc.Book)
             .WithMany(b => b.BookCategories)
@@ -35,21 +33,19 @@ public class ApplicationDbContext : DbContext
             .WithMany(c => c.BookCategories)
             .HasForeignKey(bc => bc.CategoryId);
 
-        // Book → Loan
         modelBuilder.Entity<Loan>()
             .HasOne(l => l.Book)
             .WithMany(b => b.Loans)
             .HasForeignKey(l => l.BookId);
 
-        // Client → Loan
         modelBuilder.Entity<Loan>()
             .HasOne(l => l.Client)
             .WithMany(c => c.Loans)
             .HasForeignKey(l => l.ClientId);
 
-        // Unikalny e-mail klienta
         modelBuilder.Entity<Client>()
             .HasIndex(c => c.Email)
             .IsUnique();
     }
+
 }

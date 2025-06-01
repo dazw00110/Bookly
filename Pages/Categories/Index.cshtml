@@ -4,37 +4,39 @@
     ViewData["Title"] = "Kategorie";
 }
 
-<h2 class="mb-4">📂 Kategorie</h2>
+<h2>📚 Kategorie książek</h2>
 
-<a asp-page="Create" class="btn btn-success mb-3">➕ Dodaj nową kategorię</a>
+<a asp-page="Create" class="btn btn-primary mb-3">➕ Dodaj kategorię</a>
 
-@if (Model.Categories.Any())
-{
-    <table class="table table-striped">
-        <thead>
+<form method="get" class="mb-3 row g-2">
+    <div class="col-md-6">
+        <input name="SearchName" value="@Model.SearchName" class="form-control" placeholder="Szukaj kategorii..." />
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-primary">🔍 Szukaj</button>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th><a asp-route-SortBy="name" asp-route-SortDesc="@(Model.SortBy == "name" && !Model.SortDesc)">Nazwa</a></th>
+        <th><a asp-route-SortBy="count" asp-route-SortDesc="@(Model.SortBy == "count" && !Model.SortDesc)">Liczba książek</a></th>
+        <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var category in Model.Categories)
+    {
         <tr>
-            <th>Nazwa</th>
-            <th>Liczba książek</th>
-            <th>Akcje</th>
+            <td>@category.Name</td>
+            <td>@category.BookCategories.Count</td>
+            <td>
+                <a asp-page="Edit" asp-route-id="@category.Id" class="btn btn-sm btn-warning">Edytuj</a>
+                <a asp-page="Delete" asp-route-id="@category.Id" class="btn btn-sm btn-danger">Usuń</a>
+                <a asp-page="/Books/Index" asp-route-SelectedCategoryIds="@category.Id" class="btn btn-sm btn-info">📚 Książki</a>
+            </td>
         </tr>
-        </thead>
-        <tbody>
-        @foreach (var category in Model.Categories)
-        {
-            <tr>
-                <td>@category.Name</td>
-                <td>@category.BookCategories.Count</td>
-                <td>
-                    <a asp-page="Details" asp-route-id="@category.Id" class="btn btn-sm btn-info">📚 Książki</a>
-                    <a asp-page="Edit" asp-route-id="@category.Id" class="btn btn-sm btn-warning">✏️ Edytuj</a>
-                    <a asp-page="Delete" asp-route-id="@category.Id" class="btn btn-sm btn-danger">🗑️ Usuń</a>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
-else
-{
-    <div class="alert alert-warning">Brak kategorii do wyświetlenia.</div>
-}
+    }
+    </tbody>
+</table>

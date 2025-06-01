@@ -1,14 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Bookly.Models;
 
 public class Category
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
-    [Required]
-    [Display(Name = "Nazwa kategorii")]
-    public string Name { get; set; } = null!;
+    [Required(ErrorMessage = "Nazwa kategorii jest wymagana.")]
+    public string Name { get; set; } = string.Empty;
 
-    public ICollection<BookCategory> BookCategories { get; set; } = new List<BookCategory>();
+    public List<BookCategory> BookCategories { get; set; } = new();
 }

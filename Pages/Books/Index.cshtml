@@ -7,6 +7,9 @@
 <h2 class="mb-4">📚 Lista książek</h2>
 
 <form method="get" class="mb-4 border rounded p-3 bg-light">
+    <input type="hidden" name="SortBy" value="@Model.SortBy" />
+    <input type="hidden" name="SortDesc" value="@Model.SortDesc" />
+
     <div class="row g-3">
         <div class="col-md-4">
             <label class="form-label">Tytuł</label>
@@ -18,11 +21,11 @@
         </div>
         <div class="col-md-2">
             <label class="form-label">Rok od</label>
-            <input type="number" name="YearFrom" value="@Model.YearFrom" min="1" max="2025" class="form-control" />
+            <input type="number" name="YearFrom" value="@Model.YearFrom" class="form-control" />
         </div>
         <div class="col-md-2">
             <label class="form-label">Rok do</label>
-            <input type="number" name="YearTo" value="@Model.YearTo" min="1" max="2025" class="form-control" />
+            <input type="number" name="YearTo" value="@Model.YearTo" class="form-control" />
         </div>
     </div>
 
@@ -42,16 +45,9 @@
         <div class="col-md-3">
             <label class="form-label">Status</label>
             <select class="form-select" name="Status">
-                @foreach (var option in new[] {
-                    new { Value = "", Label = "-- Wszystkie --" },
-                    new { Value = "available", Label = "Dostępna" },
-                    new { Value = "borrowed", Label = "Wypożyczona" }
-                })
-                {
-                    <option value="@option.Value" selected="@(Model.Status == option.Value)">
-                        @option.Label
-                    </option>
-                }
+                <option value="" selected>-- Wszystkie --</option>
+                <option value="available" selected="@(Model.Status == "available")">Dostępna</option>
+                <option value="borrowed" selected="@(Model.Status == "borrowed")">Wypożyczona</option>
             </select>
         </div>
 
@@ -62,7 +58,7 @@
     </div>
 </form>
 
-<a asp-page="Create" class="btn btn-success mb-3">➕ Dodaj nową książkę</a>
+<a asp-page="Create" class="btn btn-primary mb-3">➕ Dodaj nową książkę</a>
 
 @if (Model.Books.Any())
 {
@@ -73,9 +69,9 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Tytuł</th>
-                <th>Autor</th>
-                <th>Rok</th>
+                <th><a asp-route-SortBy="title" asp-route-SortDesc="@(Model.SortBy == "title" && !Model.SortDesc)">Tytuł</a></th>
+                <th><a asp-route-SortBy="author" asp-route-SortDesc="@(Model.SortBy == "author" && !Model.SortDesc)">Autor</a></th>
+                <th><a asp-route-SortBy="year" asp-route-SortDesc="@(Model.SortBy == "year" && !Model.SortDesc)">Rok</a></th>
                 <th>Kategorie</th>
                 <th>Status</th>
                 <th>Akcje</th>

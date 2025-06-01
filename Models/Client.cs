@@ -22,4 +22,7 @@ public class Client
     public string Email { get; set; } = string.Empty;
 
     public ICollection<Loan> Loans { get; set; } = new List<Loan>();
+
+    [Display(Name = "Imię i nazwisko")]
+    public string FullName => $"{FirstName} {LastName}";
 }

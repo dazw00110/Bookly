@@ -1,5 +1,6 @@
 ﻿using Bookly.Data;
 using Bookly.Models;
+using Bogus;
 
 namespace Bookly.Seeders;
 
@@ -9,98 +10,105 @@ public static class Seeder
     {
         if (context.Clients.Any() || context.Books.Any() || context.Categories.Any())
         {
-            Console.WriteLine("⚠️ Baza już zawiera dane – seedery pominięte.");
+            Console.WriteLine("📦 Baza danych już zawiera dane – pomijam seedowanie.");
             return;
         }
 
+        var faker = new Faker("pl");
         var random = new Random();
 
-        // Kategorie
-        var categories = new List<Category>
+        // 🔹 Kategorie
+        var categoryNames = new[]
         {
-            new() { Name = "Fantasy" },
-            new() { Name = "Sci-Fi" },
-            new() { Name = "Kryminał" },
-            new() { Name = "Romans" },
-            new() { Name = "Historyczna" }
+            "Fantasy", "Science Fiction", "Kryminał", "Romans", "Historyczna",
+            "Literatura faktu", "Dziecięca", "Thriller", "Psychologia", "Technologia"
         };
+
+        var categories = categoryNames.Select((name, i) => new Category
+        {
+            Id = i + 1,
+            Name = name
+        }).ToList();
         context.Categories.AddRange(categories);
 
-        // Klienci
-        var clients = new List<Client>();
-        for (int i = 1; i <= 20; i++)
-        {
-            clients.Add(new Client
-            {
-                FirstName = $"Imię{i}",
-                LastName = $"Nazwisko{i}",
-                Email = $"user{i}@mail.com"
-            });
-        }
+        // 🔹 Klienci
+        var clients = new Faker<Client>("pl")
+            .RuleFor(c => c.FirstName, f => f.Name.FirstName())
+            .RuleFor(c => c.LastName, f => f.Name.LastName())
+            .RuleFor(c => c.Email, (f, c) => f.Internet.Email(c.FirstName, c.LastName))
+            .Generate(50);
         context.Clients.AddRange(clients);
-        Console.WriteLine("➡️ Dodano klientów");
 
-        // Książki
-        var books = new List<Book>();
-        for (int i = 1; i <= 50; i++)
-        {
-            books.Add(new Book
-            {
-                Title = $"Książka {i}",
-                Author = $"Autor {i}",
-                Year = 1980 + random.Next(0, 40)
-            });
-        }
+        // 🔹 Książki
+        var books = new Faker<Book>("pl")
+            .RuleFor(b => b.Title, f => f.Lorem.Sentence(3))
+            .RuleFor(b => b.Author, f => f.Name.FullName())
+            .RuleFor(b => b.Year, f => f.Random.Int(1950, 2024))
+            .RuleFor(b => b.IsBorrowed, false)
+            .Generate(200);
         context.Books.AddRange(books);
-        Console.WriteLine("➡️ Dodano książki");
 
-        // Relacje książka-kategoria (1-2 kategorie na książkę)
+        context.SaveChanges(); // 🔑 TERAZ ID są dostępne
+
+        // 🔹 BookCategories
         var bookCategories = new List<BookCategory>();
         foreach (var book in books)
         {
-            var assigned = new HashSet<int>();
-            int categoryCount = random.Next(1, 3);
-            for (int i = 0; i < categoryCount; i++)
+            var count = random.Next(1, 4);
+            var pickedCategories = categories.OrderBy(_ => random.Next()).Take(count).ToList();
+            foreach (var cat in pickedCategories)
             {
-                int catIndex;
-                do
-                {
-                    catIndex = random.Next(categories.Count);
-                } while (!assigned.Add(catIndex));
-
                 bookCategories.Add(new BookCategory
                 {
-                    Book = book,
-                    Category = categories[catIndex]
+                    BookId = book.Id,
+                    CategoryId = cat.Id
                 });
             }
         }
         context.BookCategories.AddRange(bookCategories);
 
-        // Wypożyczenia (10 losowych)
+        // 🔹 Wypożyczenia
         var loans = new List<Loan>();
-        var usedBooks = new HashSet<int>();
-        for (int i = 0; i < 10; i++)
-        {
-            var book = books[random.Next(books.Count)];
-            if (!usedBooks.Add(book.Id)) continue;
+        var usedBookIds = new HashSet<int>();
+        var savedClients = context.Clients.ToList();
+        var savedBooks = context.Books.ToList();
 
-            var client = clients[random.Next(clients.Count)];
+        for (int i = 0; i < 30; i++)
+        {
+            var client = savedClients[random.Next(savedClients.Count)];
+            var availableBooks = savedBooks.Where(b => !usedBookIds.Contains(b.Id)).ToList();
+            if (!availableBooks.Any()) break;
+
+            var book = availableBooks[random.Next(availableBooks.Count)];
+            usedBookIds.Add(book.Id);
+
+            var loanDate = faker.Date.Past(2).ToUniversalTime();
+            var plannedReturn = loanDate.AddDays(14);
+            DateTime? returnDate = null;
+
+            if (random.NextDouble() < 0.7)
+            {
+                returnDate = loanDate.AddDays(random.Next(1, 15));
+                book.IsBorrowed = false;
+            }
+            else
+            {
+                book.IsBorrowed = true;
+            }
 
             loans.Add(new Loan
             {
-                Book = book,
-                Client = client,
-                LoanDate = DateTime.UtcNow.AddDays(-random.Next(1, 14)),
-                ReturnDate = random.Next(0, 2) == 0 ? null : DateTime.UtcNow.AddDays(-random.Next(1, 5))
+                ClientId = client.Id,
+                BookId = book.Id,
+                LoanDate = loanDate,
+                PlannedReturnDate = plannedReturn,
+                ReturnDate = returnDate
             });
-
-            book.IsBorrowed = true;
         }
-        context.Loans.AddRange(loans);
-        Console.WriteLine("Dodano relacje i wypożyczenia");
 
+        context.Loans.AddRange(loans);
         context.SaveChanges();
-        Console.WriteLine("Seeder zakończony pomyślnie!");
+
+        Console.WriteLine($"✅ Dodano: {categories.Count} kategorii, {clients.Count} klientów, {books.Count} książek, {loans.Count} wypożyczeń");
     }
 }

@@ -24,27 +24,67 @@ public class CreateModel : PageModel
 
     public async Task<IActionResult> OnGetAsync()
     {
-        Clients = new SelectList(await _context.Clients.ToListAsync(), "Id", "Email");
-        Books = new SelectList(await _context.Books.Where(b => !b.IsBorrowed).ToListAsync(), "Id", "Title");
-
+        await LoadSelectLists();
+        Loan.LoanDate = DateTime.UtcNow.Date;
+        Loan.PlannedReturnDate = DateTime.UtcNow.Date.AddDays(14);
         return Page();
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
-        var book = await _context.Books.FindAsync(Loan.BookId);
+        // 🚫 Usuń wymagania dla encji podrzędnych (tylko ID są używane)
+        ModelState.Remove("Loan.Book");
+        ModelState.Remove("Loan.Client");
+
+        // Walidacje niestandardowe
+        if (Loan.LoanDate > DateTime.UtcNow.Date)
+        {
+            ModelState.AddModelError("Loan.LoanDate", "Data wypożyczenia nie może być w przyszłości.");
+        }
+
+        if (Loan.PlannedReturnDate < Loan.LoanDate)
+        {
+            ModelState.AddModelError("Loan.PlannedReturnDate", "Planowana data zwrotu nie może być wcześniejsza niż data wypożyczenia.");
+        }
+
+        var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == Loan.BookId);
         if (book == null || book.IsBorrowed)
         {
-            ModelState.AddModelError("", "Wybrana książka jest już wypożyczona.");
+            ModelState.AddModelError("Loan.BookId", "Wybrana książka jest już wypożyczona.");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            Console.WriteLine("❌ Błędy walidacji:");
+            foreach (var kvp in ModelState)
+            {
+                foreach (var error in kvp.Value.Errors)
+                {
+                    Console.WriteLine($"❌ {kvp.Key}: {error.ErrorMessage}");
+                }
+            }
+
+            await LoadSelectLists();
             return Page();
         }
 
-        Loan.LoanDate = DateTime.UtcNow.Date; // ✅ Ustawienie daty w UTC
+        // Zapis danych
+        book!.IsBorrowed = true;
+        Loan.LoanDate = DateTime.SpecifyKind(Loan.LoanDate, DateTimeKind.Utc);
+        Loan.PlannedReturnDate = DateTime.SpecifyKind(Loan.PlannedReturnDate, DateTimeKind.Utc);
 
         _context.Loans.Add(Loan);
-        book.IsBorrowed = true;
-
+        _context.Books.Update(book);
         await _context.SaveChangesAsync();
+
+        Console.WriteLine($"✅ Wypożyczono: BookId={Loan.BookId}, ClientId={Loan.ClientId}, Data={Loan.LoanDate:yyyy-MM-dd}");
+
         return RedirectToPage("Index");
+    }
+
+    private async Task LoadSelectLists()
+    {
+        Clients = new SelectList(await _context.Clients.ToListAsync(), "Id", "FullName");
+        Books = new SelectList(await _context.Books.Where(b => !b.IsBorrowed).ToListAsync(), "Id", "Title");
     }
 }

@@ -280,3 +280,4 @@ E:\Zadania\SEMESTR 4\C#\Projekt4\aktualne\Bookly\obj\Debug\net8.0\refint\Bookly.
 E:\Zadania\SEMESTR 4\C#\Projekt4\aktualne\Bookly\obj\Debug\net8.0\Bookly.pdb
 E:\Zadania\SEMESTR 4\C#\Projekt4\aktualne\Bookly\obj\Debug\net8.0\Bookly.genruntimeconfig.cache
 E:\Zadania\SEMESTR 4\C#\Projekt4\aktualne\Bookly\obj\Debug\net8.0\ref\Bookly.dll
+E:\Zadania\SEMESTR 4\C#\Projekt4\aktualne\Bookly\bin\Debug\net8.0\Bogus.dll

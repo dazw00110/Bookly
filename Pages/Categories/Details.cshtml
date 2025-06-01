@@ -1,29 +1,45 @@
-﻿@page
-@model Bookly.Pages.Categories.DetailsModel
+﻿@page "{id:int}"
+@model Bookly.Pages.Categories.BooksModel
 @{
-    ViewData["Title"] = "Szczegóły kategorii";
+    ViewData["Title"] = "Książki w kategorii";
 }
 
-<h2 class="mb-4">📂 Kategoria: <span class="text-primary">@Model.Category.Name</span></h2>
+<h2 class="mb-4">📚 Książki w kategorii: <span class="text-primary">@Model.CategoryName</span></h2>
 
-@if (Model.Category.BookCategories.Any())
+@if (Model.Books.Any())
 {
-    <h4>Książki przypisane do tej kategorii:</h4>
-    <ul class="list-group mb-4">
-        @foreach (var bookCategory in Model.Category.BookCategories)
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Tytuł</th>
+            <th>Autor</th>
+            <th>Rok</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var book in Model.Books)
         {
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span>
-                    <strong>@bookCategory.Book.Title</strong> — @bookCategory.Book.Author (@bookCategory.Book.Year)
-                </span>
-                <a asp-page="/Books/Details" asp-route-id="@bookCategory.Book.Id" class="btn btn-sm btn-outline-info">Szczegóły</a>
-            </li>
+            <tr>
+                <td>@book.Title</td>
+                <td>@book.Author</td>
+                <td>@book.Year</td>
+                <td>
+                    @if (book.IsBorrowed)
+                    {
+                        <span class="badge bg-danger">Wypożyczona</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">Dostępna</span>
+                    }
+                </td>
+            </tr>
         }
-    </ul>
+        </tbody>
+    </table>
 }
 else
 {
-    <div class="alert alert-warning">Brak przypisanych książek do tej kategorii.</div>
+    <div class="alert alert-warning">Brak książek przypisanych do tej kategorii.</div>
 }
-
-<a asp-page="Index" class="btn btn-secondary">⬅️ Powrót</a>

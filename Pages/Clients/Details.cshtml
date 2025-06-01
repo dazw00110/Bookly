@@ -5,36 +5,33 @@
 }
 
 <h2>📋 Szczegóły klienta</h2>
-
 <dl class="row">
     <dt class="col-sm-3">Imię i nazwisko:</dt>
     <dd class="col-sm-9">@Model.Client.FirstName @Model.Client.LastName</dd>
-
     <dt class="col-sm-3">E-mail:</dt>
     <dd class="col-sm-9">@Model.Client.Email</dd>
 </dl>
 
-<h4>📚 Wypożyczone książki:</h4>
-
-@if (Model.Client.Loans.Any())
+<h4>📚 Wypożyczenia:</h4>
+@if (Model.Loans.Any())
 {
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Tytuł</th>
-            <th>Data wypożyczenia</th>
+            <th>Książka</th>
+            <th>Wypożyczono</th>
+            <th>Planowany zwrot</th>
             <th>Data zwrotu</th>
         </tr>
         </thead>
         <tbody>
-        @foreach (var loan in Model.Client.Loans)
+        @foreach (var loan in Model.Loans)
         {
             <tr>
                 <td>@loan.Book.Title</td>
                 <td>@loan.LoanDate.ToShortDateString()</td>
-                <td>
-                    @(loan.ReturnDate.HasValue ? loan.ReturnDate.Value.ToShortDateString() : "Nie zwrócono")
-                </td>
+                <td>@loan.PlannedReturnDate.ToShortDateString()</td>
+                <td>@(loan.ReturnDate?.ToShortDateString() ?? "Nie zwrócono")</td>
             </tr>
         }
         </tbody>
@@ -42,5 +39,5 @@
 }
 else
 {
-    <div class="alert alert-info">Ten klient nie ma aktywnych wypożyczeń.</div>
+    <div class="alert alert-info">Brak wypożyczeń dla tego klienta.</div>
 }

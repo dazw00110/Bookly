@@ -12,8 +12,10 @@
     <strong>Klient:</strong> @Model.Loan.Client.FirstName @Model.Loan.Client.LastName<br />
     <strong>Email:</strong> @Model.Loan.Client.Email<br />
     <strong>Data wypożyczenia:</strong> @Model.Loan.LoanDate.ToShortDateString()<br />
-    <strong>Data zwrotu:</strong> @(Model.Loan.ReturnDate?.ToShortDateString() ?? "—")
+    <strong>Data zwrotu:</strong> @(Model.Loan.ReturnDate?.ToShortDateString() ?? "—")<br />
+    <strong>Planowany termin zwrotu:</strong> @(Model.Loan.LoanDate.AddDays(14).ToShortDateString())
 </div>
+
 
 <a asp-page="Edit" asp-route-id="@Model.Loan.Id" class="btn btn-warning">✏️ Edytuj</a>
 <a asp-page="Index" class="btn btn-secondary">← Wróć</a>

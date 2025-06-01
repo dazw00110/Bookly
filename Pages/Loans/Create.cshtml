@@ -8,15 +8,33 @@
 
 <form method="post">
     <div class="mb-3">
-        <label class="form-label">Klient</label>
+        <label asp-for="Loan.ClientId" class="form-label"></label>
         <select asp-for="Loan.ClientId" asp-items="Model.Clients" class="form-select"></select>
+        <span asp-validation-for="Loan.ClientId" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Książka</label>
+        <label asp-for="Loan.BookId" class="form-label"></label>
         <select asp-for="Loan.BookId" asp-items="Model.Books" class="form-select"></select>
+        <span asp-validation-for="Loan.BookId" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Wypożycz</button>
+    <div class="mb-3">
+        <label asp-for="Loan.LoanDate" class="form-label"></label>
+        <input asp-for="Loan.LoanDate" type="date" class="form-control" max="@DateTime.UtcNow.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="Loan.LoanDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Loan.PlannedReturnDate" class="form-label"></label>
+        <input asp-for="Loan.PlannedReturnDate" type="date" class="form-control" min="@DateTime.UtcNow.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="Loan.PlannedReturnDate" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">📚 Wypożycz</button>
     <a asp-page="Index" class="btn btn-secondary">Anuluj</a>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -4,49 +4,68 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bookly.Pages.Books;
-
-public class CreateModel : PageModel
+namespace Bookly.Pages.Books
 {
-    private readonly ApplicationDbContext _context;
-
-    public CreateModel(ApplicationDbContext context)
+    public class CreateModel : PageModel
     {
-        _context = context;
-    }
+        private readonly ApplicationDbContext _context;
 
-    [BindProperty]
-    public Book Book { get; set; } = new();
+        public CreateModel(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
-    [BindProperty]
-    public List<int> SelectedCategoryIds { get; set; } = new();
+        [BindProperty]
+        public Book Book { get; set; } = new();
 
-    public List<Category> AllCategories { get; set; } = new();
+        [BindProperty]
+        public List<int> SelectedCategoryIds { get; set; } = new();
 
-    public async Task<IActionResult> OnGetAsync()
-    {
-        Book.Year = DateTime.Now.Year; // 🟢 Domyślny rok (np. 2025)
-        AllCategories = await _context.Categories.ToListAsync();
-        return Page();
-    }
+        public List<Category> AllCategories { get; set; } = new();
 
-    public async Task<IActionResult> OnPostAsync()
-    {
-        if (!ModelState.IsValid)
+        public string? CategoryValidationError { get; set; }
+
+        public async Task<IActionResult> OnGetAsync()
         {
             AllCategories = await _context.Categories.ToListAsync();
+
+            // ➤ Ustawienie domyślnego roku na bieżący (np. 2025)
+            if (Book.Year == 0)
+            {
+                Book.Year = DateTime.Now.Year;
+            }
+
             return Page();
         }
 
-        // ➕ Przypisanie kategorii do książki
-        Book.BookCategories = SelectedCategoryIds.Select(id => new BookCategory
+        public async Task<IActionResult> OnPostAsync()
         {
-            CategoryId = id
-        }).ToList();
+            AllCategories = await _context.Categories.ToListAsync();
 
-        _context.Books.Add(Book);
-        await _context.SaveChangesAsync();
+            if (SelectedCategoryIds == null || !SelectedCategoryIds.Any())
+            {
+                CategoryValidationError = "Musisz wybrać przynajmniej jedną kategorię.";
+                return Page();
+            }
 
-        return RedirectToPage("Index");
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            foreach (var categoryId in SelectedCategoryIds)
+            {
+                Book.BookCategories.Add(new BookCategory
+                {
+                    CategoryId = categoryId,
+                    Book = Book
+                });
+            }
+
+            _context.Books.Add(Book);
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage("Index");
+        }
     }
 }

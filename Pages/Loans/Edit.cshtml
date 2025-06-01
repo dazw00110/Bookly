@@ -1,24 +1,24 @@
-﻿@page
+﻿@page "{id:int}"
 @model Bookly.Pages.Loans.EditModel
 @{
-    ViewData["Title"] = "Zwrot książki";
+    ViewData["Title"] = "Zwróć książkę";
 }
 
-<h2>📤 Zwrot książki</h2>
-
-<div class="mb-3">
-    <strong>Książka:</strong> @Model.Loan.Book.Title<br />
-    <strong>Klient:</strong> @Model.Loan.Client.FirstName @Model.Loan.Client.LastName<br />
-    <strong>Data wypożyczenia:</strong> @Model.Loan.LoanDate.ToShortDateString()
-</div>
+<h2>🔁 Zwróć książkę</h2>
 
 <form method="post">
     <input type="hidden" asp-for="Loan.Id" />
-    <div class="mb-3">
-        <label asp-for="Loan.ReturnDate" class="form-label">Data zwrotu</label>
-        <input asp-for="Loan.ReturnDate" class="form-control" type="date" />
+
+    <div class="form-group">
+        <label asp-for="Loan.ReturnDate">Data zwrotu</label>
+        <input asp-for="Loan.ReturnDate" class="form-control" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
         <span asp-validation-for="Loan.ReturnDate" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-success">Zwróć książkę</button>
+
+    <button type="submit" class="btn btn-success">📦 Zwróć</button>
     <a asp-page="Index" class="btn btn-secondary">Anuluj</a>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

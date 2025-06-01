@@ -6,27 +6,33 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bookly.Pages.Categories;
 
-public class DetailsModel : PageModel
+public class BooksModel : PageModel
 {
     private readonly ApplicationDbContext _context;
 
-    public DetailsModel(ApplicationDbContext context)
+    public BooksModel(ApplicationDbContext context)
     {
         _context = context;
     }
 
-    public Category Category { get; set; } = new();
+    public string CategoryName { get; set; } = "";
+    public List<Book> Books { get; set; } = [];
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
         var category = await _context.Categories
-            .Include(c => c.BookCategories).ThenInclude(bc => bc.Book)
+            .Include(c => c.BookCategories)
+            .ThenInclude(bc => bc.Book)
             .FirstOrDefaultAsync(c => c.Id == id);
 
         if (category == null)
             return NotFound();
 
-        Category = category;
+        CategoryName = category.Name;
+        Books = category.BookCategories
+            .Select(bc => bc.Book)
+            .ToList();
+
         return Page();
     }
 }

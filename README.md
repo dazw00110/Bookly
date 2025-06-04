@@ -116,6 +116,12 @@ cd Bookly
 ```
 
 3. Utwórz bazę danych PostgreSQL 14 i uruchom migracje:
+
+Utworzenie kontenera Docker z PostgreSQL:
+
+``docker run --name bookly -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=bookly -p 5432:5432 -d postgres:14``
+
+Uruchomienie migracji EF Core:
 ```bash
 dotnet ef database update
 ```

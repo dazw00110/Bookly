@@ -127,7 +127,7 @@ dotnet run
 
 5. Otwórz przeglądarkę:
 ```
-https://localhost:5001
+http://localhost:5159
 ```
 
 ---
